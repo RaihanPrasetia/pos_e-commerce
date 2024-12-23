@@ -1,5 +1,5 @@
 "use client"
-import Pagination from '@/components/card/CardFooter';
+import Pagination from '@/components/pagination/Pagination';
 import EditCategoryModal from '@/components/category/EditCategoryModal';
 import { ChevronDownIcon, ChevronUpIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
 import React, { useState } from 'react';
@@ -104,7 +104,7 @@ export default function ListCategory() {
 
     return (
         <div className="flex gap-4">
-            <div className="card w-full h-full shadow-xl border-2-gray-500 rounded-xl overflow-hidden pb-6 bg-white">
+            <div className="card min-h-[508px] shadow-mui-customShadow w-full h-full  border-2-gray-500 rounded-md overflow-hidden pb-6 bg-white flex flex-col">
                 <div className="card-head p-4 flex items-center justify-between">
                     <h2 className="text-xl font-semibold text-gray-500">List Categories</h2>
 
@@ -112,7 +112,7 @@ export default function ListCategory() {
                     <button
                         onClick={handleDeleteSelectedCategories}
                         disabled={selectedCategories.length === 0} // Disable the button if no categories are selected
-                        className="flex space-x-3 items-center p-3 text-xs font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-lg shadow-md transition hover:brightness-110 disabled:bg-gray-400"
+                        className="flex space-x-3 items-center p-3 text-xs font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-md transition hover:brightness-110 disabled:bg-gray-400"
                     >
                         <TrashIcon className="h-4 w-4 mr-2" />
                         Delete Selected
@@ -125,7 +125,7 @@ export default function ListCategory() {
                         <select
                             value={pagination}
                             onChange={(e) => setPagination(Number(e.target.value))}
-                            className="px-2 py-1 rounded-lg bg-gray-100 text-gray-500 focus:ring-1 focus:ring-gray-500"
+                            className="px-2 py-1 rounded-md bg-gray-100 text-gray-500 focus:ring-1 focus:ring-gray-500"
                         >
                             <option value={5} className="text-gray-700">5</option>
                             <option value={10} className="text-gray-700">10</option>
@@ -139,15 +139,15 @@ export default function ListCategory() {
                         placeholder="Search Categories..."
                         value={searchTerm}
                         onChange={handleSearchChange}
-                        className="px-4 py-1 rounded-lg border border-gray-300 text-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                        className="px-4 py-1 rounded-md border border-gray-300 text-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500"
                     />
                 </div>
 
-                <div className="card-body px-4">
+                <div className="card-body px-4 flex-grow">
                     {categories.length === 0 ? (
                         <p className="text-gray-500">No categories added yet.</p>
                     ) : (
-                        <table className="min-w-full bg-white rounded-lg">
+                        <table className="min-w-full bg-white rounded-md">
                             <thead>
                                 <tr className="border-b">
                                     <th className="py-2 px-4 w-10 text-left text-sm font-semibold text-gray-400">#</th>
@@ -188,7 +188,7 @@ export default function ListCategory() {
                                             </td>
                                             <td className="py-2 px-4 text-sm space-x-3 flex">
                                                 <button
-                                                    className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg shadow-md transition hover:brightness-110"
+                                                    className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-md shadow-md transition hover:brightness-110"
                                                     onClick={() => handleEditCategory(category)}
                                                 >
                                                     <PencilSquareIcon className="h-4 w-4" />
@@ -196,7 +196,7 @@ export default function ListCategory() {
                                                 </button>
 
                                                 <button
-                                                    className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-lg shadow-md transition hover:brightness-110"
+                                                    className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-md transition hover:brightness-110"
                                                     onClick={() => console.log('Delete clicked')}
                                                 >
                                                     <TrashIcon className="h-4 w-4" />
@@ -210,17 +210,17 @@ export default function ListCategory() {
                     )}
                 </div>
 
-                <div className="card-footer px-4 flex justify-center items-center py-2 mt-4 space-x-2">
+                <div className="card-footer px-4 flex justify-end items-center py-2 mt-4 space-x-2">
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
                         onPageChange={setCurrentPage}
                     />
                 </div>
-
             </div>
 
-            <div className="card w-1/2 h-full shadow-xl border-2-gray-500 rounded-xl overflow-hidden pb-6 bg-white">
+
+            <div className="card w-1/2 h-full shadow-mui-customShadow border-2-gray-500 rounded-md overflow-hidden pb-6 bg-white">
                 <div className="card-head p-4 flex items-center justify-between">
                     <h2 className="text-xl font-semibold text-gray-500">Add Category</h2>
                 </div>
@@ -237,12 +237,12 @@ export default function ListCategory() {
                                 value={categoryName}
                                 onChange={(e) => setCategoryName(e.target.value)}
                                 placeholder="Enter category name"
-                                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500"
+                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
                             />
                         </div>
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-md hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                            className="px-4 py-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white font-semibold rounded-md shadow-md hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
                         >
                             Add Category
                         </button>

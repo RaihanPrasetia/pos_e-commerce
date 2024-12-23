@@ -4,7 +4,8 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { ChevronUpIcon, ChevronDownIcon, PlusIcon, ListBulletIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid'; // Import Hero Icons
 import { useRouter } from 'next/navigation';
-import Pagination from '@/components/card/CardFooter';
+import Pagination from '@/components/pagination/Pagination';
+import SelectInput from '@/components/form/SelectInput';
 // Example product data
 const products = [
     { id: 1, name: 'Product A', category: 'Category 1', price: '$20', code: 'P001', qty: 10, status: 'Available', imageUrl: 'https://picsum.photos/50' },
@@ -24,6 +25,10 @@ export default function ListProduct() {
     const router = useRouter();
     const [currentPage, setCurrentPage] = useState<number>(1);
 
+    const handleToEdit = (productId: number) => {
+        // Navigate to the edit product page with the product ID
+        router.push(`/products/edit-product?id=${productId}`);
+    };
 
     const navigateToAddProduct = () => {
         router.push('/products/new-product');
@@ -71,21 +76,21 @@ export default function ListProduct() {
 
 
     return (
-        <div className="card shadow-xl border-2-gray-500 rounded-xl overflow-hidden pb-6 bg-white">
+        <div className="card shadow-mui-customShadow min-h-[560.8px] border-2-slate-500 rounded-md overflow-hidden px-4 pb-6 bg-white flex flex-col">
             {/* Card Header */}
             <div className="card-head p-4 flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-500">List Product</h2>
+                <h2 className="text-xl font-semibold text-slate-500">List Product</h2>
                 <div className="flex space-x-2">
                     <button
                         onClick={navigateToCategory}
-                        className="flex items-center px-4 border shadow-lg py-2 text-sm font-semibold text-white bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-lg transition hover:brightness-110"
+                        className="flex items-center px-4 border shadow-lg py-2 text-sm font-semibold text-white bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-md transition hover:brightness-110"
                     >
                         <ListBulletIcon className="h-5 w-5 mr-1" />
                         Category
                     </button>
                     <button
                         onClick={navigateToAddProduct}
-                        className="flex items-center px-4 border shadow-lg py-2 text-sm font-semibold text-white bg-gradient-to-r from-pink-500 to-purple-700 rounded-lg transition "
+                        className="flex items-center px-4 border shadow-lg py-2 text-sm font-semibold text-white bg-gradient-to-r from-pink-500 to-purple-700 rounded-md transition "
                     >
                         <PlusIcon className="h-5 w-5 mr-1" /> {/* Add Icon */}
                         Product
@@ -95,76 +100,118 @@ export default function ListProduct() {
 
             {/* Card Sub-Header: Pagination and Search */}
             <div className="card-sub-head p-4 flex items-center justify-between">
+                {/* Select for Pagination */}
                 <div className="flex items-center space-x-2">
-                    <span className="text-gray-500">Show</span>
-                    <select
-                        value={pagination}
+                    <span className="text-slate-500">Show</span>
+                    <SelectInput
+                        label=""
+                        name="pagination"
+                        value={String(pagination)}
                         onChange={(e) => setPagination(Number(e.target.value))}
-                        className="px-2 py-1 rounded-lg bg-gray-100 text-gray-500 focus:ring-1 focus:ring-gray-500"
-                    >
-                        <option value={5} className="text-gray-700">5</option>
-                        <option value={10} className="text-gray-700">10</option>
-                        <option value={20} className="text-gray-700">20</option>
-                    </select>
-                    <span className="text-gray-500">items per page</span>
+                        options={['5', '10', '20']}
+                        px={2}
+                        py={1}
+                    />
                 </div>
 
+                {/* Search Input */}
                 <input
                     type="text"
                     placeholder="Search Products..."
                     value={searchTerm}
                     onChange={handleSearchChange}
-                    className="px-4 py-1 rounded-lg border border-gray-300 text-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                    className="px-4 py-1 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-500"
                 />
             </div>
 
-            {/* Card Body */}
-            <div className="card-body">
-                <table className="min-w-full bg-gray-50">
+            {/* Card Body with flex-grow */}
+            <div className="card-body flex-grow">
+                <div className="flex justify-between items-center mb-4 px-4">
+                    {/* Jumlah item terpilih */}
+                    <div>
+                        <span className="text-sm font-semibold text-slate-500">
+                            {selectedProducts.length > 0
+                                ? `${selectedProducts.length} item(s) selected`
+                                : ''}
+                        </span>
+                    </div>
+
+                    {/* Tombol delete semua */}
+                    {selectedProducts.length > 0 && (
+                        <button
+                            onClick={() => {
+                                // Aksi untuk menghapus item yang dipilih
+                                setSelectedProducts([]);
+                                console.log('Delete all selected items');
+                            }}
+                            className="flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-sm rounded-md shadow-md hover:brightness-110"
+                        >
+                            <TrashIcon className="h-5 w-5 mr-2" />
+                            Delete All
+                        </button>
+                    )}
+                </div>
+                <table className="min-w-full">
                     <thead>
                         <tr>
+                            <th className="py-2 px-4 text-left text-sm font-semibold text-slate-400 w-px">
+                                {/* Checkbox Select All */}
+                                <input
+                                    type="checkbox"
+                                    className="h-4 w-4"
+                                    checked={selectedProducts.length === products.length && products.length > 0}
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setSelectedProducts(products.map((product) => product.id));
+                                        } else {
+                                            setSelectedProducts([]);
+                                        }
+                                    }}
+                                />
+                            </th>
                             {['name', 'category', 'price', 'code', 'qty', 'status'].map((column) => (
-                                <th key={column} className="py-2 px-4 text-left text-sm font-semibold text-gray-400">
+                                <th key={column} className="py-2 px-4 text-left text-sm font-semibold text-slate-400">
                                     <div className="flex justify-between items-center">
                                         <span>{column.charAt(0).toUpperCase() + column.slice(1)}</span>
                                         <button onClick={() => handleSort(column)} className="ml-2">
                                             {sortedBy === column && sortOrder === 'asc' ? (
-                                                <ChevronUpIcon className="h-5 w-5 text-gray-500" />
+                                                <ChevronUpIcon className="h-5 w-5 text-slate-500" />
                                             ) : (
-                                                <ChevronDownIcon className="h-5 w-5 text-gray-500" />
+                                                <ChevronDownIcon className="h-5 w-5 text-slate-500" />
                                             )}
                                         </button>
                                     </div>
                                 </th>
                             ))}
-                            <th className="py-2 px-4 text-left text-sm font-semibold text-gray-400 w-px">Action</th>
+                            <th className="py-2 px-4 text-left text-sm font-semibold text-slate-400 w-px">Action</th>
                         </tr>
-
                     </thead>
                     <tbody>
                         {sortedProducts
                             .slice((currentPage - 1) * pagination, currentPage * pagination)
                             .map((product) => (
                                 <tr key={product.id} className="border-t">
+                                    <td className="py-2 px-4 text-sm text-slate-500 w-px">
+                                        <input
+                                            type="checkbox"
+                                            className="h-4 w-4"
+                                            checked={selectedProducts.includes(product.id)}
+                                            onChange={() => handleSelectProduct(product.id)}
+                                        />
+                                    </td>
                                     <td className="py-2 px-4">
                                         <div className="flex space-x-4 items-center">
-                                            <input
-                                                type="checkbox"
-                                                className="h-4 w-4"
-                                                checked={selectedProducts.includes(product.id)}
-                                                onChange={() => handleSelectProduct(product.id)}
-                                            />
-                                            <Image src={product.imageUrl} alt={product.name} width={10} height={10} className="w-10 h-10 rounded" />
-                                            <span className="text-sm font-semibold text-gray-500">{product.name}</span>
+                                            <Image src={product.imageUrl} alt={product.name} width={10} height={10} className="w-10 h-10 rounded-full" />
+                                            <span className="text-sm font-semibold text-slate-500">{product.name}</span>
                                         </div>
                                     </td>
-                                    <td className="py-2 px-4 text-sm text-gray-500 w-px">{product.category}</td>
-                                    <td className="py-2 px-4 text-sm text-gray-500 w-px">{product.price}</td>
-                                    <td className="py-2 px-4 text-sm text-gray-500 w-px">{product.code}</td>
-                                    <td className="py-2 px-4 text-sm text-gray-500 w-px">{product.qty}</td>
+                                    <td className="py-2 px-4 text-sm text-slate-500 w-px">{product.category}</td>
+                                    <td className="py-2 px-4 text-sm text-slate-500 w-px">{product.price}</td>
+                                    <td className="py-2 px-4 text-sm text-slate-500 w-px">{product.code}</td>
+                                    <td className="py-2 px-4 text-sm text-slate-500 w-px">{product.qty}</td>
                                     <td className="py-2 px-4 text-sm w-52 text-center">
                                         <span
-                                            className={`text-sm font-semibold text-gray-500 rounded-md px-3 py-1 ${product.status === 'Available'
+                                            className={`text-sm font-semibold  rounded-md px-3 py-1 ${product.status === 'Available'
                                                 ? 'bg-gradient-to-br from-lime-400 via-green-500 to-emerald-500 text-white'
                                                 : 'bg-gradient-to-br from-orange-500  via-red-600 to-orange-700 text-white'
                                                 }`}
@@ -173,11 +220,10 @@ export default function ListProduct() {
                                         </span>
                                     </td>
 
-
                                     <td className="py-2 px-4 text-sm space-x-3 flex">
                                         <button
-                                            className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg shadow-md transition hover:brightness-110"
-                                            onClick={() => console.log('Edit clicked')}
+                                            className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-md shadow-md transition hover:brightness-110"
+                                            onClick={() => handleToEdit(product.id)}
                                         >
                                             <PencilSquareIcon className="h-4 w-4" />
                                             <span>Edit</span>
@@ -185,7 +231,7 @@ export default function ListProduct() {
 
                                         {/* Tombol Delete */}
                                         <button
-                                            className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-lg shadow-md transition hover:brightness-110"
+                                            className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-md transition hover:brightness-110"
                                             onClick={() => console.log('Delete clicked')}
                                         >
                                             <TrashIcon className="h-4 w-4" />
@@ -197,14 +243,16 @@ export default function ListProduct() {
                     </tbody>
                 </table>
             </div>
-            <div className="card-footer px-4 flex justify-center items-center py-2 mt-4 space-x-2">
+
+            {/* Card Footer */}
+            <div className="card-footer px-4 flex justify-end items-center py-2 mt-4 space-x-2">
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
                 />
             </div>
-
         </div>
+
     );
 }

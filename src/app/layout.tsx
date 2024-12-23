@@ -58,7 +58,7 @@ export default function RootLayout({
                         <Navbar toggleSidebar={handleSidebarToggle} />
 
                         {/* Main Content */}
-                        <main className="p-4">{children}</main>
+                        <main className="px-8 pb-8">{children}</main>
                     </div>
                 </AuthProvider>
             </body>

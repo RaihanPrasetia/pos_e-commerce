@@ -17,6 +17,7 @@ const breadcrumbMap: { [key: string]: string } = {
     dashboard: "Dashboard",
     products: "Products",
     "new-product": "New Product",
+    "edit-product": "Edit Product",
     category: "List Category",
 };
 
@@ -62,8 +63,8 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                 <button
                     onClick={handleToggleSidebar}
                     className={`p-2 transition rounded-lg ${isSidebarActive
-                        ? " bg-gradient-to-br from-pink-500 to-purple-700 border-2 border-gray-100 shadow-xl text-white"
-                        : "text-gray-400 hover:bg-white hover:shadow-lg hover:text-gray-900"
+                        ? " bg-gradient-to-br from-pink-500 to-purple-700 border-2 border-gray-100 shadow-mui-customShadow text-white"
+                        : "text-gray-400 hover:bg-white hover:shadow-mui-customShadow hover:text-gray-900"
                         }`}
                 >
                     {isSidebarActive ? (
@@ -103,7 +104,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                     <input
                         type="text"
                         placeholder="Search..."
-                        className="w-64 px-4 py-2 rounded-lg border border-gray-200 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                        className="w-64 px-4 py-2 rounded-md shadow-mui-customShadow border border-gray-200 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-500"
                     />
                 </div>
 
@@ -111,9 +112,9 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                 <div className="relative">
                     <button
                         onClick={handleToggleNotification}
-                        className={`relative p-2 transition rounded-full ${isNotificationOpen
+                        className={`relative p-2 transition rounded-full shadow-mui-customShadow ${isNotificationOpen
                             ? "bg-gradient-to-br from-pink-500 to-purple-700 text-white shadow-lg"
-                            : "text-gray-400 hover:bg-white hover:shadow-lg hover:text-gray-900"
+                            : "text-gray-400 bg-white hover:bg-white hover:shadow-lg hover:text-gray-900"
                             }`}
                     >
                         <BellIcon className="h-6 w-6" />
@@ -122,7 +123,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                         </span>
                     </button>
                     {isNotificationOpen && (
-                        <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-xl">
+                        <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-sm shadow-xl">
                             <ul className="text-sm text-gray-500 font-medium">
                                 <li className="px-4 py-3 hover:bg-gray-100 cursor-pointer">
                                     New product added!
@@ -133,7 +134,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                                 <li className="px-4 py-3 hover:bg-gray-100 cursor-pointer">
                                     You have 2 unread messages
                                 </li>
-                                <li className="px-4 py-3 bg-gradient-to-br from-pink-500 to-purple-700 text-white hover:brightness-110 cursor-pointer text-center rounded-b-lg shadow-md transition-all duration-300 ease-in-out">
+                                <li className="px-4 py-3 bg-gradient-to-br from-pink-500 to-purple-700 text-white hover:brightness-110 cursor-pointer text-center rounded-b-sm shadow-md transition-all duration-300 ease-in-out">
                                     View all notifications
                                 </li>
                             </ul>
