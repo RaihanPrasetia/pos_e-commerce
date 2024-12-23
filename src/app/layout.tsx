@@ -8,62 +8,60 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import "./globals.css";
 
 export default function RootLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-  const [isSidebarOpen, setSidebarOpen] = useState(false); // Default sidebar tertutup
-  const [isSidebarFixed, setSidebarFixed] = useState(false); // Menonaktifkan hover saat toggle
-  const pathname = usePathname();
+    const [isSidebarOpen, setSidebarOpen] = useState(false); // Default sidebar tertutup
+    const [isSidebarFixed, setSidebarFixed] = useState(false); // Menonaktifkan hover saat toggle
+    const pathname = usePathname();
 
-  // Jangan tampilkan Sidebar atau Navbar di halaman login
-  if (pathname === "/login") {
+    // Jangan tampilkan Sidebar atau Navbar di halaman login
+    if (pathname === "/login") {
+        return (
+            <html lang="en">
+                <body>
+                    <AuthProvider>{children}</AuthProvider>
+                </body>
+            </html>
+        );
+    }
+
+    const handleSidebarToggle = () => {
+        setSidebarOpen(!isSidebarOpen);
+        setSidebarFixed(!isSidebarFixed);
+    };
+
     return (
-      <html lang="en">
-        <body>
-          <AuthProvider>{children}</AuthProvider>
-        </body>
-      </html>
+        <html lang="en">
+            <body className="flex h-screen bg-gray-100 text-black">
+                <AuthProvider>
+                    {/* Sidebar */}
+                    <div
+                        className={`fixed h-full mt-3 transition-all duration-500 ease-in-out ${isSidebarOpen ? "w-64" : "w-16"
+                            }`}
+                        onMouseEnter={() => {
+                            if (!isSidebarFixed) setSidebarOpen(true);
+                        }}
+                        onMouseLeave={() => {
+                            if (!isSidebarFixed) setSidebarOpen(false);
+                        }}
+                    >
+                        <Sidebar isOpen={isSidebarOpen} />
+                    </div>
+
+                    <div
+                        className={`flex flex-col flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? "ml-64" : "ml-16"
+                            }`}
+                    >
+                        {/* Navbar */}
+                        <Navbar toggleSidebar={handleSidebarToggle} />
+
+                        {/* Main Content */}
+                        <main className="p-4">{children}</main>
+                    </div>
+                </AuthProvider>
+            </body>
+        </html>
     );
-  }
-
-  const handleSidebarToggle = () => {
-    setSidebarOpen(!isSidebarOpen);
-    setSidebarFixed(!isSidebarFixed);
-  };
-
-  return (
-    <html lang="en">
-      <body className="flex h-screen bg-gray-100 text-black">
-        <AuthProvider>
-          {/* Sidebar */}
-          <div
-            className={`fixed h-full mt-3 transition-all duration-500 ease-in-out ${
-              isSidebarOpen ? "w-64" : "w-16"
-            }`}
-            onMouseEnter={() => {
-              if (!isSidebarFixed) setSidebarOpen(true);
-            }}
-            onMouseLeave={() => {
-              if (!isSidebarFixed) setSidebarOpen(false);
-            }}
-          >
-            <Sidebar isOpen={isSidebarOpen} />
-          </div>
-
-          <div
-            className={`flex flex-col flex-1 transition-all duration-500 ease-in-out ${
-              isSidebarOpen ? "ml-64" : "ml-16"
-            }`}
-          >
-            {/* Navbar */}
-            <Navbar toggleSidebar={handleSidebarToggle} />
-
-            {/* Main Content */}
-            <main className="p-4">{children}</main>
-          </div>
-        </AuthProvider>
-      </body>
-    </html>
-  );
 }
