@@ -2,7 +2,13 @@
 
 import React from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { ClipboardDocumentListIcon, CogIcon, HomeIcon, UserIcon, ShoppingBagIcon } from "@heroicons/react/16/solid";
+import {
+  ClipboardDocumentListIcon,
+  CogIcon,
+  HomeIcon,
+  UserIcon,
+  ShoppingBagIcon,
+} from "@heroicons/react/16/solid";
 
 const menuItems = [
   { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
@@ -12,45 +18,66 @@ const menuItems = [
   { name: "Pengaturan", href: "/settings", icon: CogIcon },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen }: { isOpen: boolean }) {
   const router = useRouter();
-  const pathname = usePathname(); // Mendapatkan path saat ini
+  const pathname = usePathname();
 
   return (
-    <div className="bg-transparent text-gray-900 border-r px-5 rounded-xl h-full flex flex-col">
-      <div className="p-4 text-lg font-bold tracking-wide text-center text-gray-800">
+    <div className="bg-white text-gray-700 border-r h-full px-0 flex flex-col transition-all duration-500 ease-in-out">
+      <div
+        className={`py-4 text-lg font-bold tracking-wide text-center ${
+          isOpen ? "opacity-100" : "opacity-0"
+        } transition-opacity duration-500 ease-in-out`}
+      >
         POS-Ecommerce
       </div>
       <hr className="bg-gray-300" />
-      {/* Bagian Scrollable */}
-      <nav className="mt-6 flex-grow overflow-y-auto">
-        <ul className="space-y-3 "> {/* Tambahkan `pr-2` untuk ruang scroll */}
-          {menuItems.map((item) => {
-            const isActive = pathname === item.href; // Periksa apakah item aktif
-            return (
-              <li key={item.name}>
-                <button
-                  onClick={() => router.push(item.href)}
-                  className={`flex items-center w-full rounded-xl px-2 py-2 space-x-3 transition duration-200 ${
-                    isActive
-                      ? "bg-white shadow-lg border rounded-lg text-gray-900"
-                      : "hover:text-gray-900 hover:bg-gray-200 focus:bg-gray-100"
-                  }`}
-                >
-                  <div
-                    className={`p-2 rounded-lg border ${
-                      isActive ? "bg-orange-500 text-white" : "bg-white text-gray-800 shadow-lg"
-                    }`}
-                  >
-                    <item.icon className="w-4 h-4" />
-                  </div>
-                  <span className="text-[12px] font-semibold text-gray-700">{item.name}</span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+
+      <nav
+  className={`mt-6 flex-grow overflow-y-auto transition-all duration-500 ease-in-out ${
+    isOpen ? "px-3" : "px-0"
+  }`}
+>
+  <ul className="space-y-3">
+    {menuItems.map((item) => {
+      const isActive = pathname.startsWith(item.href);
+      return (
+        <li key={item.name}>
+          <button
+            onClick={() => router.push(item.href)}
+            className={`flex items-center w-full px-3 py-2 space-x-3 transition-all duration-500 ease-in-out rounded-xl ${
+              isActive
+                ? isOpen
+                  ? "bg-white text-gray-700 border shadow-lg "
+                  : "bg-transparent text-gray-700 "
+                : "hover:bg-gray-200"
+            }`}
+          >
+            {/* Ikon Menu */}
+            <div
+              className={`p-2 rounded-lg transition-all duration-500 ease-in-out ${
+                isActive
+                  ? "text-white bg-orange-500"
+                  : "bg-gray-100 text-gray-700"
+              }`}
+            >
+              <item.icon className="w-5 h-5" />
+            </div>
+            {/* Label Menu */}
+            <span
+              className={`text-sm font-semibold transition-opacity duration-500 ease-in-out ${
+                isOpen ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              {item.name}
+            </span>
+          </button>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+
     </div>
   );
 }

@@ -12,6 +12,7 @@ const breadcrumbMap: { [key: string]: string } = {
   dashboard: "Dashboard",
   products: "Products",
   "new-product": "New Product",
+  "category": "List Category",
 };
 
 export default function Navbar({ toggleSidebar }: NavbarProps) {
@@ -35,7 +36,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
     }));
 
   return (
-    <nav className="flex items-center justify-between bg-transparent px-4 py-3 text-white">
+    <nav className="flex items-center justify-between bg-transparent px-4 py-6 text-white">
       {/* Konten Navbar (toggleSidebar, breadcrumb) */}
       <div className="flex items-center space-x-6">
         {/* Tombol Toggle Sidebar */}
