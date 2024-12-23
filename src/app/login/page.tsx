@@ -1,13 +1,14 @@
-"use client";
+'use client';
 
 import SlideCheckbox from "@/components/checkbox/SlideCheckbox";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext"; // Import useAuth hook
+import { TextInput } from "@/components/form/Input";
 
 export default function Login() {
     const { login } = useAuth(); // Get login method from AuthContext
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+    const [email, setEmail] = useState<string>("admin@example.com");
+    const [password, setPassword] = useState<string>("password");
     const [isChecked, setIsChecked] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false); // For handling loading state
     const [error, setError] = useState<string | null>(null); // For handling errors
@@ -35,36 +36,34 @@ export default function Login() {
     return (
         <main className="min-h-screen bg-cover bg-center gap-10 px-16 bg-gradient-to-r flex items-center justify-center transition-all duration-200">
             {/* Form Login */}
-            <div className="flex  w-2/3 justify-end h-[400px] px-24">
+            <div className="flex w-2/3 justify-end h-[400px] px-24">
                 <div className="w-full rounded-2xl">
                     <h4 className="text-2xl font-bold text-gray-900 mb-2">Sign In</h4>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
                         Enter your email and password to sign in
                     </p>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Email Input */}
-                        <div className="mb-4">
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Email"
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm"
-                                required
-                            />
-                        </div>
+                        <TextInput
+                            id="email"
+                            name="email"
+                            type="email"
+                            value={email}
+                            label="Email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
 
                         {/* Password Input */}
-                        <div className="mb-4">
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Password"
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white text-sm"
-                                required
-                            />
-                        </div>
+                        <TextInput
+                            id="password"
+                            name="password"
+                            type="password"
+                            value={password}
+                            label="Password"
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
 
                         {/* Remember Me Checkbox */}
                         <div className="flex items-center mb-4">
@@ -79,7 +78,7 @@ export default function Login() {
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            className="w-full py-4 font-bold text-white bg-violet-500 hover:bg-violet-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full py-4 font-bold text-white bg-violet-500 hover:bg-violet-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             disabled={isLoading}
                         >
                             {isLoading ? "Signing in..." : "Sign in"}
