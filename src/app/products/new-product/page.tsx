@@ -1,5 +1,6 @@
-"use client";
+// File: pages/new-product.tsx
 
+"use client";
 import dynamic from 'next/dynamic';
 
 const Stepper = dynamic(() => import('@/components/product/new/Stepper'), { ssr: false });
@@ -7,6 +8,7 @@ const ProductInfoCard = dynamic(() => import('@/components/product/new/ProductIn
 const Thumbnail = dynamic(() => import('@/components/product/new/Thumbnail'), { ssr: false });
 const ProductOrganize = dynamic(() => import('@/components/product/new/ProductOrganize'), { ssr: false });
 const ProductImage = dynamic(() => import('@/components/product/new/ProductImage'), { ssr: false });
+const Confirmation = dynamic(() => import('@/components/product/new/Confirmation'), { ssr: false });
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -25,7 +27,6 @@ export default function NewProduct() {
     const router = useRouter();
     const [currentStep, setCurrentStep] = useState(0);
 
-    // Tambahkan field untuk thumbnail ke dalam formData
     const [formData, setFormData] = useState<{
         productName: string;
         barcode: string;
@@ -36,7 +37,7 @@ export default function NewProduct() {
         status: string;
         thumbnail: File | null;
         image: File | null;
-        variants: { variant: string; value: string }[]; // Tambahkan variants
+        variants: { variant: string; value: string }[];
     }>({
         productName: "",
         barcode: "",
@@ -47,9 +48,8 @@ export default function NewProduct() {
         status: "",
         thumbnail: null,
         image: null,
-        variants: [{ variant: '', value: '' }], // Inisialisasi variants dengan nilai default
+        variants: [{ variant: '', value: '' }],
     });
-
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -91,11 +91,7 @@ export default function NewProduct() {
             </div>
 
             {/* Stepper */}
-            <Stepper
-                steps={steps}
-                currentStep={currentStep}
-                setCurrentStep={setCurrentStep}
-            />
+            <Stepper steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} />
 
             {/* Card Form */}
             <div className="flex justify-center">
@@ -105,22 +101,18 @@ export default function NewProduct() {
                         className={`transition-all duration-500 ease-in-out opacity-0 ${currentStep === 0 ? "opacity-100" : ""}`}
                     >
                         {currentStep === 0 && (
-                            <ProductInfoCard
-                                formData={formData}
-                                onInputChange={handleInputChange}
-                            />
+                            <ProductInfoCard formData={formData} onInputChange={handleInputChange} />
                         )}
                     </div>
+                    {/* Thumbnail Card */}
                     <div
                         className={`transition-all duration-500 ease-in-out opacity-0 ${currentStep === 1 ? "opacity-100" : ""}`}
                     >
                         {currentStep === 1 && (
-                            <Thumbnail
-                                formData={formData}
-                                onThumbnailChange={handleThumbnailChange}
-                            />
+                            <Thumbnail formData={formData} onThumbnailChange={handleThumbnailChange} />
                         )}
                     </div>
+                    {/* Product Organize Card */}
                     <div
                         className={`transition-all duration-500 ease-in-out opacity-0 ${currentStep === 2 ? "opacity-100" : ""}`}
                     >
@@ -128,19 +120,24 @@ export default function NewProduct() {
                             <ProductOrganize
                                 formData={formData}
                                 onInputChange={handleInputChange}
-                                setFormData={setFormData} // Pastikan untuk menambahkan setFormData
+                                setFormData={setFormData}
                             />
                         )}
                     </div>
+
+                    {/* Product Image Card */}
                     <div
                         className={`transition-all duration-500 ease-in-out opacity-0 ${currentStep === 3 ? "opacity-100" : ""}`}
                     >
                         {currentStep === 3 && (
-                            <ProductImage
-                                formData={formData}
-                                onThumbnailChange={handleImageChange} // Mengganti dengan handleImageChange
-                            />
+                            <ProductImage formData={formData} onThumbnailChange={handleImageChange} />
                         )}
+                    </div>
+                    {/* Confirmation Card */}
+                    <div
+                        className={`transition-all duration-500 ease-in-out opacity-0 ${currentStep === 4 ? "opacity-100" : ""}`}
+                    >
+                        {currentStep === 4 && <Confirmation formData={formData} />}
                     </div>
                     {/* Navigation buttons */}
                     <div className="mt-4">
