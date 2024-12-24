@@ -1,9 +1,8 @@
-// components/ProductInfoCard.tsx
-
 import React, { useEffect, useRef } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { TextInput } from "@/components/form/Input";
+
 interface ProductInfoCardProps {
     formData: {
         productName: string;
@@ -16,10 +15,12 @@ interface ProductInfoCardProps {
 
 const ProductInfoCard: React.FC<ProductInfoCardProps> = ({ formData, onInputChange }) => {
     const editorRef = useRef<HTMLDivElement>(null);
+    const quillRef = useRef<Quill | null>(null); // Menyimpan instance Quill
 
     useEffect(() => {
-        if (editorRef.current) {
-            const quill = new Quill(editorRef.current, {
+        // Hanya inisialisasi Quill jika belum ada instance yang ada
+        if (editorRef.current && !quillRef.current) {
+            quillRef.current = new Quill(editorRef.current, {
                 theme: "snow",
                 modules: {
                     toolbar: [
@@ -33,9 +34,8 @@ const ProductInfoCard: React.FC<ProductInfoCardProps> = ({ formData, onInputChan
                 placeholder: "Enter product description",
             });
 
-            quill.on("text-change", function () {
-                // Update formData.description
-                const newDescription = quill.root.innerHTML;
+            quillRef.current.on("text-change", function () {
+                const newDescription = quillRef.current?.root.innerHTML;
                 onInputChange({
                     target: { name: "description", value: newDescription },
                 } as React.ChangeEvent<HTMLInputElement>);

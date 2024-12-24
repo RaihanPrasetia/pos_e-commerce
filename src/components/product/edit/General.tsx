@@ -14,10 +14,11 @@ export default function General() {
     });
 
     const editorRef = useRef<HTMLDivElement>(null);
+    const quillRef = useRef<Quill | null>(null); // Menyimpan instansi Quill
 
     useEffect(() => {
-        if (editorRef.current) {
-            const quill = new Quill(editorRef.current, {
+        if (editorRef.current && !quillRef.current) {
+            quillRef.current = new Quill(editorRef.current, {
                 theme: "snow",
                 modules: {
                     toolbar: [
@@ -31,14 +32,16 @@ export default function General() {
                 placeholder: "Enter product description",
             });
 
-            quill.on("text-change", function () {
+            // Menangani perubahan teks di editor
+            quillRef.current.on("text-change", function () {
+                const newDescription = quillRef.current?.root.innerHTML;
                 setFormData((prev) => ({
                     ...prev,
-                    description: quill.root.innerHTML,
+                    description: newDescription || "", // Pastikan nilainya terupdate
                 }));
             });
         }
-    }, []);
+    }, []); // Efek hanya dipanggil satu kali saat pertama kali komponen dimuat
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -48,13 +51,10 @@ export default function General() {
         });
     };
 
-
     return (
         <div className="bg-white shadow-mui-customShadow p-6 rounded-md">
-            <h1 className="text-lg font-semibold  text-slate-500">Product Information</h1>
-            <div
-                className="mt-4 grid grid-cols-2 gap-4 items-start justify-start"
-            >
+            <h1 className="text-lg font-semibold text-slate-500">Product Information</h1>
+            <div className="mt-4 grid grid-cols-2 gap-4 items-start justify-start">
                 <div className="col-span-2">
                     <TextInput
                         id="productName"
