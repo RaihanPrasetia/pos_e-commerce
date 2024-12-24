@@ -1,68 +1,61 @@
-import { useState, useEffect } from "react";
-import { TextInput } from "../form/Input";
-import SelectInput from "../form/SelectInput"; // Pastikan path ini sesuai
+import React, { useState } from 'react';
+import { TextInput } from '../form/Input';
+import SelectInput from '../form/SelectInput';
 
-interface EditCategoryModalProps {
+interface AddCategoryFormProps {
     isOpen: boolean;
     onClose: () => void;
-    categoryName: string;
-    onSave: (formData: {
-        updatedName: string;
+    onSubmit: (formData: {
+        categoryName: string;
         description: string;
         status: string;
         parentCategory: string;
     }) => void;
+    parentOptions: string[]; // List parent categories
 }
 
-
-const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
+const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
     isOpen,
     onClose,
-    categoryName,
-    onSave,
+    onSubmit,
+    parentOptions,
 }) => {
     const [formData, setFormData] = useState({
-        updatedName: categoryName,
+        categoryName: '',
         description: '',
-        status: '',
-        parentCategory: '',
+        status: 'Active',
+        parentCategory: 'None',
     });
-
-    useEffect(() => {
-        if (isOpen) {
-            setFormData((prev) => ({
-                ...prev,
-                updatedName: categoryName,
-            }));
-        }
-    }, [isOpen, categoryName]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        setFormData((prevState) => ({ ...prevState, [name]: value }));
     };
 
     const handleSave = () => {
-        const { updatedName } = formData;
-        if (!updatedName.trim()) {
-            alert('Category name cannot be empty.');
-            return;
-        }
-        onSave(formData);
+        onSubmit(formData);
+        setFormData({
+            categoryName: '',
+            description: '',
+            status: 'Active',
+            parentCategory: 'None',
+        });
         onClose();
     };
 
-    return isOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-end bg-black bg-opacity-40">
-            <div className="bg-white w-80 h-full max-w-lg shadow-2xl p-6">
-                <h2 className="text-xl font-semibold text-gray-600">Edit Category</h2>
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-end bg-black bg-opacity-50">
+            <div className="bg-white w-80 max-w-lg h-full shadow-lg p-6">
+                <h2 className="text-xl font-semibold text-gray-600">Add Category</h2>
                 <div className="mt-5 space-y-4">
                     <TextInput
                         type="text"
-                        id="updatedName"
+                        id="categoryName"
                         label="Category Name"
-                        name="updatedName"
-                        value={formData.updatedName}
+                        name="categoryName"
+                        value={formData.categoryName}
                         onChange={handleInputChange}
                     />
                     <TextInput
@@ -85,12 +78,15 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
                         name="parentCategory"
                         value={formData.parentCategory}
                         onChange={handleInputChange}
-                        options={['None', 'Parent 1', 'Parent 2']}
+                        options={['None', ...parentOptions]}
                     />
                 </div>
 
-                <div className="mt-6 flex gap-4">
-                    <button onClick={onClose} className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">
+                <div className="mt-6 flex justify-start gap-4">
+                    <button
+                        onClick={onClose}
+                        className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300"
+                    >
                         Cancel
                     </button>
                     <button
@@ -102,8 +98,7 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
                 </div>
             </div>
         </div>
-    ) : null;
+    );
 };
 
-
-export default EditCategoryModal;
+export default AddCategoryForm;

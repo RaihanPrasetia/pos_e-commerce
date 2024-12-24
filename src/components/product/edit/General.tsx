@@ -10,7 +10,7 @@ export default function General() {
         weight: "",
         description: "",
         barcode: "",
-        sku: "",
+        price: "",
     });
 
     const editorRef = useRef<HTMLDivElement>(null);
@@ -84,12 +84,12 @@ export default function General() {
                 </div>
                 <div className="col-span-1">
                     <TextInput
-                        id="sku"
-                        name="sku"
+                        id="price"
+                        name="price"
                         type="text"
-                        value={formData.sku}
+                        value={formData.price}
                         onChange={handleInputChange}
-                        label="Sku"
+                        label="Price"
                         required
                     />
                 </div>

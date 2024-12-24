@@ -1,27 +1,30 @@
-"use client"
+"use client";
 import Pagination from '@/components/pagination/Pagination';
 import EditCategoryModal from '@/components/category/EditCategoryModal';
-import { ChevronDownIcon, ChevronUpIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
+import AddCategoryForm from '@/components/category/AddCategoryForm';
+import { ChevronDownIcon, ChevronUpIcon, PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/20/solid';
 import React, { useState } from 'react';
 
 // Defining the interface for Category type
 interface Category {
     id: number;
     name: string;
-    isChecked?: boolean; // Adding isChecked for the checkbox state
+    description: string;
+    status: string;
+    parentCategory: string;
+    isChecked?: boolean;
 }
 
 const initialCategories: Category[] = [
-    { id: 1, name: 'Category A' },
-    { id: 2, name: 'Category B' },
-    { id: 3, name: 'Category C' },
-    { id: 4, name: 'Category D' },
-    { id: 5, name: 'Category E' },
-    { id: 6, name: 'Category F' },
+    { id: 1, name: 'Category A', description: 'Description A', status: 'Active', parentCategory: 'None' },
+    { id: 2, name: 'Category B', description: 'Description B', status: 'Inactive', parentCategory: 'None' },
+    { id: 3, name: 'Category C', description: 'Description C', status: 'Active', parentCategory: 'None' },
+    { id: 4, name: 'Category D', description: 'Description D', status: 'Inactive', parentCategory: 'Category A' },
+    { id: 5, name: 'Category E', description: 'Description E', status: 'Active', parentCategory: 'Category B' },
+    { id: 6, name: 'Category F', description: 'Description F', status: 'Inactive', parentCategory: 'Category C' },
 ];
 
 export default function ListCategory() {
-    const [categoryName, setCategoryName] = useState<string>('');
     const [categories, setCategories] = useState<Category[]>(initialCategories);
     const [pagination, setPagination] = useState<number>(5);
     const [searchTerm, setSearchTerm] = useState<string>('');
@@ -31,37 +34,56 @@ export default function ListCategory() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
     const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleEditCategory = (category: Category) => {
         setCurrentCategory(category);
         setIsEditModalOpen(true);
     };
 
-    const handleSaveCategory = (updatedName: string) => {
+    const handleSaveCategory = (formData: {
+        updatedName: string;
+        description: string;
+        status: string;
+        parentCategory: string;
+    }) => {
         setCategories((prev) =>
             prev.map((cat) =>
-                cat.id === currentCategory?.id ? { ...cat, name: updatedName } : cat
+                cat.id === currentCategory?.id
+                    ? { ...cat, name: formData.updatedName, description: formData.description, status: formData.status, parentCategory: formData.parentCategory }
+                    : cat
             )
         );
     };
 
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (categoryName.trim() === '') {
-            alert('Category name cannot be empty.');
-            return;
-        }
-
+    const handleAddCategory = (formData: { categoryName: string; description: string; status: string; parentCategory: string }) => {
         const newId = categories.length > 0 ? categories[categories.length - 1].id + 1 : 1;
-
-        setCategories([...categories, { id: newId, name: categoryName }]);
-        alert(`Category "${categoryName}" has been added.`);
-        setCategoryName('');
+        setCategories([
+            ...categories,
+            {
+                id: newId,
+                name: formData.categoryName,
+                description: formData.description,
+                status: formData.status,
+                parentCategory: formData.parentCategory
+            }
+        ]);
+        alert(`Category "${formData.categoryName}" has been added.`);
     };
+
+
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
+    };
+
+    const handleSelectAllCategories = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.checked) {
+            setSelectedCategories(categories.map((category) => category.id));
+        } else {
+            setSelectedCategories([]);
+        }
     };
 
     const handleSelectCategory = (id: number) => {
@@ -74,12 +96,11 @@ export default function ListCategory() {
 
     const handleDeleteSelectedCategories = () => {
         if (selectedCategories.length > 0) {
-            // Filter out the selected categories
             const updatedCategories = categories.filter(
                 (category) => !selectedCategories.includes(category.id)
             );
             setCategories(updatedCategories);
-            setSelectedCategories([]); // Clear the selected categories
+            setSelectedCategories([]);
             alert('Selected categories have been deleted.');
         }
     };
@@ -104,18 +125,15 @@ export default function ListCategory() {
 
     return (
         <div className="flex gap-4">
-            <div className="card min-h-[508px] shadow-mui-customShadow w-full h-full  border-2-gray-500 rounded-md overflow-hidden pb-6 bg-white flex flex-col">
+            <div className="card min-h-[508px] shadow-mui-customShadow w-full h-full border-2-gray-500 rounded-md overflow-hidden pb-6 bg-white flex flex-col">
                 <div className="card-head p-4 flex items-center justify-between">
                     <h2 className="text-xl font-semibold text-gray-500">List Categories</h2>
-
-                    {/* Delete Selected Categories Button */}
                     <button
-                        onClick={handleDeleteSelectedCategories}
-                        disabled={selectedCategories.length === 0} // Disable the button if no categories are selected
-                        className="flex space-x-3 items-center p-3 text-xs font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-md transition hover:brightness-110 disabled:bg-gray-400"
+                        onClick={() => setIsModalOpen(true)}
+                        className="flex items-center p-3 text-xs font-semibold text-white bg-gradient-to-br from-pink-500 to-purple-700 rounded-md shadow-md transition hover:brightness-110"
                     >
-                        <TrashIcon className="h-4 w-4 mr-2" />
-                        Delete Selected
+                        <PlusIcon className="h-4 w-4 mr-1" />
+                        Add Category
                     </button>
                 </div>
 
@@ -143,6 +161,21 @@ export default function ListCategory() {
                     />
                 </div>
 
+                {selectedCategories.length > 0 && (
+                    <div className="flex justify-between items-center mb-4 px-4">
+                        <span className="text-sm font-semibold text-slate-500">
+                            {`${selectedCategories.length} item(s) selected`}
+                        </span>
+                        <button
+                            onClick={handleDeleteSelectedCategories}
+                            className="flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-sm rounded-md shadow-md hover:brightness-110"
+                        >
+                            <TrashIcon className="h-5 w-5 mr-2" />
+                            Delete All
+                        </button>
+                    </div>
+                )}
+
                 <div className="card-body px-4 flex-grow">
                     {categories.length === 0 ? (
                         <p className="text-gray-500">No categories added yet.</p>
@@ -150,7 +183,14 @@ export default function ListCategory() {
                         <table className="min-w-full bg-white rounded-md">
                             <thead>
                                 <tr className="border-b">
-                                    <th className="py-2 px-4 w-10 text-left text-sm font-semibold text-gray-400">#</th>
+                                    <th className="py-2 px-4 w-10 text-left text-sm font-semibold text-gray-400">
+                                        <input
+                                            type="checkbox"
+                                            className="h-4 w-4"
+                                            checked={selectedCategories.length === categories.length && categories.length > 0}
+                                            onChange={handleSelectAllCategories}
+                                        />
+                                    </th>
                                     <th className="py-2 px-4 text-left font-semibold text-sm text-gray-400">
                                         <div className="flex justify-between items-center">
                                             <span>Category Name</span>
@@ -166,29 +206,97 @@ export default function ListCategory() {
                                             </button>
                                         </div>
                                     </th>
+                                    <th className="py-2 px-4 text-left font-semibold text-sm text-gray-400">
+                                        <div className="flex justify-between items-center">
+                                            <span>Description</span>
+                                            <button
+                                                onClick={() => handleSort('description')}
+                                                className="ml-2"
+                                            >
+                                                {sortedBy === 'description' && sortOrder === 'asc' ? (
+                                                    <ChevronUpIcon className="h-5 w-5 text-gray-500" />
+                                                ) : (
+                                                    <ChevronDownIcon className="h-5 w-5 text-gray-500" />
+                                                )}
+                                            </button>
+                                        </div>
+                                    </th>
+                                    <th className="py-2 px-4 text-left font-semibold text-sm text-gray-400">
+                                        <div className="flex justify-between items-center">
+                                            <span>Parent Category</span>
+                                            <button
+                                                onClick={() => handleSort('parentCategory')}
+                                                className="ml-2"
+                                            >
+                                                {sortedBy === 'parentCategory' && sortOrder === 'asc' ? (
+                                                    <ChevronUpIcon className="h-5 w-5 text-gray-500" />
+                                                ) : (
+                                                    <ChevronDownIcon className="h-5 w-5 text-gray-500" />
+                                                )}
+                                            </button>
+                                        </div>
+                                    </th>
+                                    <th className="py-2 px-4 text-left font-semibold text-sm text-gray-400">
+                                        <div className="flex justify-between items-center">
+                                            <span>Status</span>
+                                            <button
+                                                onClick={() => handleSort('status')}
+                                                className="ml-2"
+                                            >
+                                                {sortedBy === 'status' && sortOrder === 'asc' ? (
+                                                    <ChevronUpIcon className="h-5 w-5 text-gray-500" />
+                                                ) : (
+                                                    <ChevronDownIcon className="h-5 w-5 text-gray-500" />
+                                                )}
+                                            </button>
+                                        </div>
+                                    </th>
                                     <th className="py-2 px-4 text-left font-semibold text-sm text-gray-400 w-px">Action</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 {sortedCategories
                                     .slice((currentPage - 1) * pagination, currentPage * pagination)
-                                    .map((category, index) => (
+                                    .map((category) => (
                                         <tr key={category.id} className="border-b">
-                                            <td className="py-2 px-4 text-sm space-x-3">{index + 1}</td>
+                                            <td className="py-2 px-4 text-sm">
+                                                <input
+                                                    type="checkbox"
+                                                    className="h-4 w-4"
+                                                    checked={selectedCategories.includes(category.id)}
+                                                    onChange={() => handleSelectCategory(category.id)}
+                                                />
+                                            </td>
                                             <td className="py-2 px-4">
                                                 <div className="flex space-x-4 items-center">
-                                                    <input
-                                                        type="checkbox"
-                                                        className="h-4 w-4"
-                                                        checked={selectedCategories.includes(category.id)}
-                                                        onChange={() => handleSelectCategory(category.id)}
-                                                    />
                                                     <span className="text-sm font-semibold text-gray-500">{category.name}</span>
+                                                </div>
+                                            </td>
+                                            <td className="py-2 px-4">
+                                                <span className="text-sm text-gray-500">{category.description}</span>
+                                            </td>
+                                            <td className="py-2 px-4">
+                                                <span className="text-sm text-gray-500">{category.parentCategory}</span>
+                                            </td>
+                                            <td className="py-2 px-4 text-sm w-52 text-center">
+                                                <div className=' flex items-center space-x-2'>
+                                                    <span
+                                                        className={`status-badge ${category.status === 'Active'
+                                                            ? 'status-active'
+                                                            : category.status === 'Inactive'
+                                                                ? 'status-inactive'
+                                                                : 'status-default'
+                                                            }`}
+                                                    >
+                                                    </span>
+
+                                                    <span className='text-slate-400 font-medium'>{category.status}</span>
                                                 </div>
                                             </td>
                                             <td className="py-2 px-4 text-sm space-x-3 flex">
                                                 <button
-                                                    className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-md shadow-md transition hover:brightness-110"
+                                                    className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-br from-pink-500 to-purple-700 rounded-md shadow-md transition hover:brightness-110"
                                                     onClick={() => handleEditCategory(category)}
                                                 >
                                                     <PencilSquareIcon className="h-4 w-4" />
@@ -219,36 +327,14 @@ export default function ListCategory() {
                 </div>
             </div>
 
+            <AddCategoryForm
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSubmit={({ categoryName, description, status, parentCategory }) => handleAddCategory({ categoryName, description, status, parentCategory })}
+                parentOptions={['Parent 1', 'Parent 2']} // List Parent Categories
+            />
 
-            <div className="card w-1/2 h-full shadow-mui-customShadow border-2-gray-500 rounded-md overflow-hidden pb-6 bg-white">
-                <div className="card-head p-4 flex items-center justify-between">
-                    <h2 className="text-xl font-semibold text-gray-500">Add Category</h2>
-                </div>
 
-                <div className="card-body px-4">
-                    <form onSubmit={handleSubmit} className="space-y-4 ">
-                        <div className="w-full">
-                            <label htmlFor="categoryName" className="block mb-2 text-sm font-medium text-gray-400">
-                                Category Name
-                            </label>
-                            <input
-                                type="text"
-                                id="categoryName"
-                                value={categoryName}
-                                onChange={(e) => setCategoryName(e.target.value)}
-                                placeholder="Enter category name"
-                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            className="px-4 py-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-white font-semibold rounded-md shadow-md hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-                        >
-                            Add Category
-                        </button>
-                    </form>
-                </div>
-            </div>
 
             <EditCategoryModal
                 isOpen={isEditModalOpen}

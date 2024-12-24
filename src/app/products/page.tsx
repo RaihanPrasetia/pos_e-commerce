@@ -210,14 +210,21 @@ export default function ListProduct() {
                                     <td className="py-2 px-4 text-sm text-slate-500 w-px">{product.code}</td>
                                     <td className="py-2 px-4 text-sm text-slate-500 w-px">{product.qty}</td>
                                     <td className="py-2 px-4 text-sm w-52 text-center">
-                                        <span
-                                            className={`text-sm font-semibold  rounded-md px-3 py-1 ${product.status === 'Available'
-                                                ? 'bg-gradient-to-br from-lime-400 via-green-500 to-emerald-500 text-white'
-                                                : 'bg-gradient-to-br from-orange-500  via-red-600 to-orange-700 text-white'
-                                                }`}
-                                        >
-                                            {product.status}
-                                        </span>
+                                        <div className='flex space-x-2 items-center'>
+                                            <span
+                                                className={`status-badge ${product.status === 'Available'
+                                                    ? 'status-active'
+                                                    : product.status === 'Out of stock'
+                                                        ? 'status-inactive'
+                                                        : 'status-default'
+                                                    }`}
+                                            >
+                                            </span>
+
+                                            <span className='text-slate-400 font-medium'>
+                                                {product.status}
+                                            </span>
+                                        </div>
                                     </td>
 
                                     <td className="py-2 px-4 text-sm space-x-3 flex">

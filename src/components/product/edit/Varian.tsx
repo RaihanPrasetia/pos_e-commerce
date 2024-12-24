@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import SelectInput from '@/components/form/SelectInput';
 import { TextInput } from '@/components/form/Input';
+import { XMarkIcon } from '@heroicons/react/20/solid';
 
 export default function Varian() {
     // State untuk menangani array varian
@@ -65,10 +66,10 @@ export default function Varian() {
                         label="Value"
                     />
                     <button
-                        className="px-4 py-2 bg-red-500 text-white rounded-md"
+                        className="  text-slate-500 rounded-full hover:text-red-500"
                         onClick={() => handleRemoveVariant(index)}
                     >
-                        Delete
+                        <XMarkIcon className='w-10 h-10' />
                     </button>
                 </div>
             ))}
@@ -76,7 +77,7 @@ export default function Varian() {
             {/* Tombol untuk menambah varian */}
             <div className="flex justify-start space-x-4">
                 <button
-                    className="px-4 py-2  bg-blue-500 text-white rounded-md"
+                    className="px-4 py-2 text-white rounded-md font-medium hover:brightness-110 transition-all duration-300 shadow-mui-customShadow bg-gradient-to-br from-pink-500 to-purple-700"
                     onClick={handleAddVariant}
                 >
                     Add Variant
