@@ -105,6 +105,7 @@ export default function ListProduct() {
                             px={2}
                             py={1}
                         />
+                        <span className="text-gray-500 text-nowrap">items per page</span>
                     </div>
 
                     {/* Search Input */}
