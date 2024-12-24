@@ -1,18 +1,20 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
+// components/ProductInfoCard.tsx
+
+import React, { useEffect, useRef } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { TextInput } from "@/components/form/Input";
+interface ProductInfoCardProps {
+    formData: {
+        productName: string;
+        barcode: string;
+        price: string;
+        description: string;
+    };
+    onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
-export default function General() {
-    const [formData, setFormData] = useState({
-        productName: "",
-        weight: "",
-        description: "",
-        barcode: "",
-        price: "",
-    });
-
+const ProductInfoCard: React.FC<ProductInfoCardProps> = ({ formData, onInputChange }) => {
     const editorRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -32,36 +34,26 @@ export default function General() {
             });
 
             quill.on("text-change", function () {
-                setFormData((prev) => ({
-                    ...prev,
-                    description: quill.root.innerHTML,
-                }));
+                // Update formData.description
+                const newDescription = quill.root.innerHTML;
+                onInputChange({
+                    target: { name: "description", value: newDescription },
+                } as React.ChangeEvent<HTMLInputElement>);
             });
         }
-    }, []);
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
+    }, [onInputChange]);
 
     return (
-        <div className="bg-white shadow-mui-customShadow p-6 rounded-md">
-            <h1 className="text-lg font-semibold  text-slate-500">Product Information</h1>
-            <div
-                className="mt-4 grid grid-cols-2 gap-4 items-start justify-start"
-            >
+        <div className="w-full transition duration-300">
+            <h1 className="text-lg font-semibold text-slate-500">Product Information</h1>
+            <div className="mt-4 grid grid-cols-2 gap-4 items-start justify-start">
                 <div className="col-span-2">
                     <TextInput
                         id="productName"
                         name="productName"
                         type="text"
                         value={formData.productName}
-                        onChange={handleInputChange}
+                        onChange={onInputChange}
                         label="Product Name"
                         required
                     />
@@ -71,9 +63,9 @@ export default function General() {
                         id="barcode"
                         name="barcode"
                         type="text"
-                        value={formData.barcode}
-                        onChange={handleInputChange}
                         label="Barcode"
+                        value={formData.barcode}
+                        onChange={onInputChange}
                         required
                     />
                 </div>
@@ -82,9 +74,9 @@ export default function General() {
                         id="price"
                         name="price"
                         type="text"
-                        value={formData.price}
-                        onChange={handleInputChange}
                         label="Price"
+                        value={formData.price}
+                        onChange={onInputChange}
                         required
                     />
                 </div>
@@ -95,9 +87,11 @@ export default function General() {
                     >
                         Description
                     </label>
-                    <div ref={editorRef} className="border" />
+                    <div ref={editorRef} className="border p-2 text-sm" />
                 </div>
             </div>
         </div>
     );
-}
+};
+
+export default ProductInfoCard;

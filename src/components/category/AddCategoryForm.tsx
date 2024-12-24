@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextInput } from '../form/Input';
 import SelectInput from '../form/SelectInput';
+import { XMarkIcon } from '@heroicons/react/20/solid';
 
 interface AddCategoryFormProps {
     isOpen: boolean;
@@ -47,8 +48,16 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-end bg-black bg-opacity-50">
-            <div className="bg-white w-80 max-w-lg h-full shadow-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-600">Add Category</h2>
+            <div className="bg-white w-96 max-w-lg h-full shadow-lg p-6">
+                <div className="mb-4 flex items-center justify-between">
+                    <h2 className="text-xl font-semibold text-gray-600 ">Edit Category</h2>
+                    <button
+                        onClick={onClose}
+                    >
+                        <XMarkIcon className="h-6 w-6" />
+                    </button>
+                </div>
+                <hr className="flex bg-slate-700" />
                 <div className="mt-5 space-y-4">
                     <TextInput
                         type="text"

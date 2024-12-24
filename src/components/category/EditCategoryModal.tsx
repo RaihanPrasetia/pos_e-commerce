@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { TextInput } from "../form/Input";
 import SelectInput from "../form/SelectInput"; // Pastikan path ini sesuai
+import { XMarkIcon } from "@heroicons/react/20/solid";
 
 interface EditCategoryModalProps {
     isOpen: boolean;
@@ -54,8 +55,16 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
 
     return isOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-end bg-black bg-opacity-40">
-            <div className="bg-white w-80 h-full max-w-lg shadow-2xl p-6">
-                <h2 className="text-xl font-semibold text-gray-600">Edit Category</h2>
+            <div className="bg-white w-96 h-full max-w-lg shadow-2xl p-6">
+                <div className="mb-4 flex items-center justify-between">
+                    <h2 className="text-xl font-semibold text-gray-600 ">Edit Category</h2>
+                    <button
+                        onClick={onClose}
+                    >
+                        <XMarkIcon className="h-6 w-6" />
+                    </button>
+                </div>
+                <hr className="flex bg-slate-700" />
                 <div className="mt-5 space-y-4">
                     <TextInput
                         type="text"
