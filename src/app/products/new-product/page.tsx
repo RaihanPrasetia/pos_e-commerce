@@ -1,13 +1,17 @@
 "use client";
+
+import dynamic from 'next/dynamic';
+
+const Stepper = dynamic(() => import('@/components/product/new/Stepper'), { ssr: false });
+const ProductInfoCard = dynamic(() => import('@/components/product/new/ProductInfo'), { ssr: false });
+const Thumbnail = dynamic(() => import('@/components/product/new/Thumbnail'), { ssr: false });
+const ProductOrganize = dynamic(() => import('@/components/product/new/ProductOrganize'), { ssr: false });
+const ProductImage = dynamic(() => import('@/components/product/new/ProductImage'), { ssr: false });
+
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeftCircleIcon } from "@heroicons/react/20/solid";
-import Stepper from "@/components/product/new/Stepper";
-import ProductInfoCard from "@/components/product/new/ProductInfo";
 import NavigationButtons from "@/components/product/new/NavigationButton";
-import ProductOrganize from "@/components/product/new/ProductOrganize";
-import Thumbnail from "@/components/product/new/Thumbnail";
-import ProductImage from "@/components/product/new/ProductImage";
 
 const steps = [
     { title: "Information" },
