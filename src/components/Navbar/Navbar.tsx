@@ -163,7 +163,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                         </span>
                     </button>
                     {isNotificationOpen && (
-                        <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-sm shadow-xl">
+                        <div className="absolute z-50 right-0 mt-2 w-64 bg-white border border-gray-200 rounded-sm shadow-xl">
                             <ul className="text-sm text-gray-500 font-medium">
                                 <li className="px-4 py-3 hover:bg-gray-100 cursor-pointer">
                                     New product added!
@@ -199,7 +199,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                     </button>
                     {/* Dropdown Menu */}
                     {isDropdownOpen && (
-                        <div className="absolute right-0 p-4 mt-2 w-56 bg-white rounded-md shadow-lg border border-gray-100">
+                        <div className="absolute z-50 right-0 p-4 mt-2 w-56 bg-white rounded-md shadow-lg border border-gray-100">
                             <ul className="text-sm text-gray-600">
                                 {/* My Profile */}
                                 <li
