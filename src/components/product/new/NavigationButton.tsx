@@ -21,7 +21,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
                 onClick={handlePrevious}
                 disabled={currentStep === 0}
                 className={`px-4 py-2 text-sm font-medium rounded-md ${currentStep === 0
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    ? "bg-gray-200 text-gray-400  cursor-not-allowed"
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                     }`}
             >
@@ -31,7 +31,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
                 onClick={handleNext}
                 disabled={currentStep === totalSteps - 1}
                 className={`px-4 py-2 text-sm font-medium rounded-md ${currentStep === totalSteps - 1
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    ? "hidden"
                     : "bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-md hover:opacity-90"
                     }`}
             >
