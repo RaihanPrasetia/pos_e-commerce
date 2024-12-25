@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --mui-mainColorChannels-lightShadow: 38, 43, 67, 0.16;
+  --mui-mainColorChannels-lightShadow: 38, 43, 67, 0.10;
 }
 
 .status-badge {

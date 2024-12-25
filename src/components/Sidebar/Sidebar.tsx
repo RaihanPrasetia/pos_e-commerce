@@ -79,7 +79,7 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
                                 <button
                                     onClick={() => (hasSubMenu ? toggleDropdown(item.name) : router.push(item.href))}
                                     className={`flex items-center w-full px-3 py-2 space-x-3 rounded-xl text-sm font-semibold transition-all duration-300 ease-in-out ${isActive
-                                        ? `${isOpen ? "bg-white text-gray-900 shadow-mui-customShadow" : "text-gray-900"}`
+                                        ? `${isOpen ? "bg-purple-200 text-purple-700 shadow-mui-customShadow" : "text-gray-900"}`
                                         : "hover:bg-gray-100 text-gray-700"
                                         }`}
                                 >

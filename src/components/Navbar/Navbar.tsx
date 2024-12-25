@@ -7,7 +7,6 @@ import {
     Bars3CenterLeftIcon,
     ShoppingCartIcon,
     CogIcon,
-    UserCircleIcon,
     ArrowLeftEndOnRectangleIcon,
 } from "@heroicons/react/20/solid";
 import { useAuth } from "@/contexts/AuthContext"; // Import useAuth hook
@@ -187,15 +186,15 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                 <div ref={profileRef} className="relative">
                     <button
                         onClick={toggleDropdown}
-                        className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border border-gray-300"
+                        className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden"
                     >
                         {/* Gambar Avatar (boleh diganti dengan gambar profil pengguna) */}
                         <Image
-                            src="https://picsum.photos/700" // URL gambar placeholder (ganti dengan gambar avatar sebenarnya)
+                            src="/assets/img/avatar/profile.png" // URL gambar placeholder (ganti dengan gambar avatar sebenarnya)
                             alt="User Avatar"
                             className="w-full h-full object-cover"
-                            width={16}
-                            height={16}
+                            width={100}
+                            height={100}
                         />
                     </button>
                     {/* Dropdown Menu */}
@@ -207,7 +206,13 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                                     onClick={() => router.push('/profile')}
                                     className="flex items-center rounded-md p-3 hover:bg-gray-100 cursor-pointer"
                                 >
-                                    <UserCircleIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                    <Image
+                                        src="/assets/img/avatar/profile.png" // URL gambar placeholder (ganti dengan gambar avatar sebenarnya)
+                                        alt="User Avatar"
+                                        className="w-5 h-5 object-cover mr-2"
+                                        width={100}
+                                        height={100}
+                                    />
                                     <span>My Profile</span>
                                 </li>
                                 <hr className="flex bg-slate-600 my-2" />

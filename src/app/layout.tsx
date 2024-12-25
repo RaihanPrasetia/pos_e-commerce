@@ -6,6 +6,7 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 import Navbar from "@/components/Navbar/Navbar";
 import { AuthProvider } from "@/contexts/AuthContext";
 import "./globals.css";
+import Footer from "@/components/Footer/Footer";
 
 export default function RootLayout({
     children,
@@ -58,7 +59,10 @@ export default function RootLayout({
                         <Navbar toggleSidebar={handleSidebarToggle} />
 
                         {/* Main Content */}
-                        <main className="px-8 pb-8">{children}</main>
+                        <main className="px-16 pb-8">{children}</main>
+
+                        {/* Footer */}
+                        <Footer />
                     </div>
                 </AuthProvider>
             </body>
