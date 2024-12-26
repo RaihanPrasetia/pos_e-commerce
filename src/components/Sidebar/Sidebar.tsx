@@ -44,11 +44,11 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
                 {isOpen ? (
                     <>
                         <Image
-                            src="https://picsum.photos/600"
+                            src="/assets/img/avatar/profile.png"
                             alt="Logo"
                             className="w-10 h-10 rounded-full"
-                            width={24}
-                            height={24}
+                            width={100}
+                            height={100}
                         />
                         <div className="text-center transition-opacity duration-1000 ease-in-out opacity-100 text-nowrap">
                             POS-Ecommerce
@@ -56,11 +56,11 @@ export default function Sidebar({ isOpen }: { isOpen: boolean }) {
                     </>
                 ) : (
                     <Image
-                        src="https://picsum.photos/600"
+                        src="/assets/img/avatar/profile.png"
                         alt="Logo"
                         className="w-10 h-10 rounded-full"
-                        width={10}
-                        height={10}
+                        width={100}
+                        height={100}
                     />
                 )}
             </div>
