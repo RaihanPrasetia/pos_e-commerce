@@ -35,7 +35,7 @@ export default function RootLayout({
 
     return (
         <html lang="en">
-            <body className="flex h-screen bg-gray-100 text-black">
+            <body className="flex min-h-screen bg-gray-100 text-black">
                 <AuthProvider>
                     {/* Sidebar */}
                     <div
@@ -52,7 +52,7 @@ export default function RootLayout({
                     </div>
 
                     <div
-                        className={`flex flex-col flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? "ml-64" : "ml-16"
+                        className={`flex flex-col min-h-screen flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? "ml-64" : "ml-16"
                             }`}
                     >
                         {/* Navbar */}
