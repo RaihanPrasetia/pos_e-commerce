@@ -59,7 +59,7 @@ export default function RootLayout({
                         <Navbar toggleSidebar={handleSidebarToggle} />
 
                         {/* Main Content */}
-                        <main className="px-16 pb-8">{children}</main>
+                        <main className="px-16 pb-8 min-h-[100vh]">{children}</main>
 
                         {/* Footer */}
                         <Footer />

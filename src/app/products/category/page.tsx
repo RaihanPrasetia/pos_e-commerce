@@ -5,39 +5,35 @@ import AddCategoryForm from '@/components/category/AddCategoryForm';
 import { ChevronDownIcon, ChevronUpIcon, PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/20/solid';
 import React, { useState } from 'react';
 import SelectInput from '@/components/form/SelectInput';
+import { CategoryType } from '@type/categoryTypes';
+import { v4 as uuidv4 } from 'uuid';
+import Swal from 'sweetalert2';
 
 // Defining the interface for Category type
-interface Category {
-    id: number;
-    name: string;
-    description: string;
-    status: string;
-    parentCategory: string;
-    isChecked?: boolean;
-}
 
-const initialCategories: Category[] = [
-    { id: 1, name: 'Category A', description: 'Description A', status: 'Active', parentCategory: 'None' },
-    { id: 2, name: 'Category B', description: 'Description B', status: 'Inactive', parentCategory: 'None' },
-    { id: 3, name: 'Category C', description: 'Description C', status: 'Active', parentCategory: 'None' },
-    { id: 4, name: 'Category D', description: 'Description D', status: 'Inactive', parentCategory: 'Category A' },
-    { id: 5, name: 'Category E', description: 'Description E', status: 'Active', parentCategory: 'Category B' },
-    { id: 6, name: 'Category F', description: 'Description F', status: 'Inactive', parentCategory: 'Category C' },
+
+const initialCategories: CategoryType[] = [
+    { id: '1', name: 'Category A', description: 'Description A', status: 'Active', parentId: 'None' },
+    { id: '2', name: 'Category B', description: 'Description B', status: 'Inactive', parentId: 'None' },
+    { id: '3', name: 'Category C', description: 'Description C', status: 'Active', parentId: 'None' },
+    { id: '4', name: 'Category D', description: 'Description D', status: 'Inactive', parentId: '1' },
+    { id: '5', name: 'Category E', description: 'Description E', status: 'Active', parentId: '2' },
+    { id: '6', name: 'Category F', description: 'Description F', status: 'Inactive', parentId: '3' },
 ];
 
 export default function ListCategory() {
-    const [categories, setCategories] = useState<Category[]>(initialCategories);
+    const [categories, setCategories] = useState<CategoryType[]>(initialCategories);
     const [pagination, setPagination] = useState<number>(5);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [sortedBy, setSortedBy] = useState<string>('name');
     const [sortOrder, setSortOrder] = useState<string>('asc');
-    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-    const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
+    const [currentCategory, setCurrentCategory] = useState<CategoryType | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleEditCategory = (category: Category) => {
+    const handleEditCategory = (category: CategoryType) => {
         setCurrentCategory(category);
         setIsEditModalOpen(true);
     };
@@ -46,20 +42,20 @@ export default function ListCategory() {
         updatedName: string;
         description: string;
         status: string;
-        parentCategory: string;
+        parentId: string;
     }) => {
         setCategories((prev) =>
             prev.map((cat) =>
                 cat.id === currentCategory?.id
-                    ? { ...cat, name: formData.updatedName, description: formData.description, status: formData.status, parentCategory: formData.parentCategory }
+                    ? { ...cat, name: formData.updatedName, description: formData.description, status: formData.status, parentId: formData.parentId }
                     : cat
             )
         );
     };
 
 
-    const handleAddCategory = (formData: { categoryName: string; description: string; status: string; parentCategory: string }) => {
-        const newId = categories.length > 0 ? categories[categories.length - 1].id + 1 : 1;
+    const handleAddCategory = (formData: { categoryName: string; description: string; status: string; parentId: string }) => {
+        const newId = uuidv4();
         setCategories([
             ...categories,
             {
@@ -67,10 +63,15 @@ export default function ListCategory() {
                 name: formData.categoryName,
                 description: formData.description,
                 status: formData.status,
-                parentCategory: formData.parentCategory
+                parentId: formData.parentId
             }
         ]);
-        alert(`Category "${formData.categoryName}" has been added.`);
+        Swal.fire({
+            title: 'Success!',
+            text: `Category "${formData.categoryName}" has been added.`,
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
     };
 
 
@@ -87,7 +88,7 @@ export default function ListCategory() {
         }
     };
 
-    const handleSelectCategory = (id: number) => {
+    const handleSelectCategory = (id: string) => {
         setSelectedCategories((prev) =>
             prev.includes(id)
                 ? prev.filter((categoryId) => categoryId !== id)
@@ -95,14 +96,20 @@ export default function ListCategory() {
         );
     };
 
+
     const handleDeleteSelectedCategories = () => {
         if (selectedCategories.length > 0) {
             const updatedCategories = categories.filter(
-                (category) => !selectedCategories.includes(category.id)
+                (category) => !selectedCategories.includes(String(category.id))
             );
             setCategories(updatedCategories);
             setSelectedCategories([]);
-            alert('Selected categories have been deleted.');
+            Swal.fire({
+                title: 'Deleted!',
+                text: 'Selected categories have been deleted.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
         }
     };
 
@@ -112,13 +119,35 @@ export default function ListCategory() {
         setSortOrder(newSortOrder);
     };
 
+    const handleDeleteCategory = (id: string, name: string) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `Are you sure you want to delete ${name}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const updatedCategories = categories.filter((category) => category.id !== id);
+                setCategories(updatedCategories);
+                Swal.fire({
+                    title: 'Deleted!',
+                    text: `${name} has been deleted.`,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    }
+
     const sortedCategories = categories
         .filter((category) =>
             category.name.toLowerCase().includes(searchTerm.toLowerCase())
         )
         .sort((a, b) => {
-            if ((a[sortedBy as keyof Category] as string) < (b[sortedBy as keyof Category] as string)) return sortOrder === 'asc' ? -1 : 1;
-            if ((a[sortedBy as keyof Category] as string) > (b[sortedBy as keyof Category] as string)) return sortOrder === 'asc' ? 1 : -1;
+            if ((a[sortedBy as keyof CategoryType] as string) < (b[sortedBy as keyof CategoryType] as string)) return sortOrder === 'asc' ? -1 : 1;
+            if ((a[sortedBy as keyof CategoryType] as string) > (b[sortedBy as keyof CategoryType] as string)) return sortOrder === 'asc' ? 1 : -1;
             return 0;
         });
 
@@ -232,10 +261,10 @@ export default function ListCategory() {
                                             <div className="flex justify-between items-center">
                                                 <span>Parent Category</span>
                                                 <button
-                                                    onClick={() => handleSort('parentCategory')}
+                                                    onClick={() => handleSort('parentId')}
                                                     className="ml-2"
                                                 >
-                                                    {sortedBy === 'parentCategory' && sortOrder === 'asc' ? (
+                                                    {sortedBy === 'parentId' && sortOrder === 'asc' ? (
                                                         <ChevronUpIcon className="h-5 w-5 text-gray-500" />
                                                     ) : (
                                                         <ChevronDownIcon className="h-5 w-5 text-gray-500" />
@@ -284,7 +313,9 @@ export default function ListCategory() {
                                                     <span className="text-sm text-gray-500">{category.description}</span>
                                                 </td>
                                                 <td className="py-2 px-4">
-                                                    <span className="text-sm text-gray-500">{category.parentCategory}</span>
+                                                    <span className="text-sm text-gray-500">
+                                                        {categories.find((cat) => cat.id === category.parentId)?.name || "None"}
+                                                    </span>
                                                 </td>
                                                 <td className="py-2 px-4 text-sm w-52 text-center">
                                                     <div className=' flex items-center space-x-2'>
@@ -312,7 +343,7 @@ export default function ListCategory() {
 
                                                     <button
                                                         className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-md transition hover:brightness-110"
-                                                        onClick={() => console.log('Delete clicked')}
+                                                        onClick={() => handleDeleteCategory(category.id, category.name)}
                                                     >
                                                         <TrashIcon className="h-4 w-4" />
                                                         <span>Delete</span>
@@ -337,8 +368,8 @@ export default function ListCategory() {
                 <AddCategoryForm
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
-                    onSubmit={({ categoryName, description, status, parentCategory }) => handleAddCategory({ categoryName, description, status, parentCategory })}
-                    parentOptions={['Parent 1', 'Parent 2']} // List Parent Categories
+                    onSubmit={({ categoryName, description, status, parentId }) => handleAddCategory({ categoryName, description, status, parentId })}
+                    parentOptions={categories} // List Parent Categories
                 />
 
 
@@ -346,8 +377,9 @@ export default function ListCategory() {
                 <EditCategoryModal
                     isOpen={isEditModalOpen}
                     onClose={() => setIsEditModalOpen(false)}
-                    categoryName={currentCategory?.name || ''}
+                    category={currentCategory ? currentCategory : undefined}
                     onSave={handleSaveCategory}
+                    parentOptions={categories} // List Parent Categories
                 />
 
             </div>

@@ -25,11 +25,15 @@ const menuItems = [
         ],
     },
     { name: "Pesanan", href: "/orders", icon: ClipboardDocumentListIcon },
-    { name: "Pelanggan", href: "/customers", icon: UserIcon },
+    { name: "Pelanggan", href: "/customers/list", icon: UserIcon },
     { name: "Pengaturan", href: "/settings", icon: CogIcon },
 ];
 
-export default function Sidebar({ isOpen }: { isOpen: boolean }) {
+export type SidebarProps = {
+    isOpen: boolean
+}
+
+export default function Sidebar({ isOpen }: SidebarProps) {
     const router = useRouter();
     const pathname = usePathname();
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);

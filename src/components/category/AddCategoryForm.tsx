@@ -1,7 +1,20 @@
-import React, { useState } from 'react';
-import { TextInput } from '../form/Input';
-import SelectInput from '../form/SelectInput';
-import { XMarkIcon } from '@heroicons/react/20/solid';
+import React, { useState } from "react";
+import {
+    Drawer,
+    TextField,
+    Select,
+    MenuItem,
+    InputLabel,
+    FormControl,
+    Box,
+    Stack,
+    Typography,
+    IconButton,
+} from "@mui/material";
+import { SelectChangeEvent } from "@mui/material/Select";
+import { CategoryType } from "@/type/categoryTypes";
+import { XMarkIcon } from "@heroicons/react/16/solid";
+import { v4 as uuidv4 } from 'uuid';
 
 interface AddCategoryFormProps {
     isOpen: boolean;
@@ -10,9 +23,9 @@ interface AddCategoryFormProps {
         categoryName: string;
         description: string;
         status: string;
-        parentCategory: string;
+        parentId: string;
     }) => void;
-    parentOptions: string[]; // List parent categories
+    parentOptions: CategoryType[]; // List parent categories
 }
 
 const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
@@ -22,76 +35,96 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
     parentOptions,
 }) => {
     const [formData, setFormData] = useState({
-        categoryName: '',
-        description: '',
-        status: 'Active',
-        parentCategory: 'None',
+        id: "",
+        categoryName: "",
+        description: "",
+        status: "Active",
+        parentId: "None",
     });
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    // Handler untuk TextField
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prevState) => ({ ...prevState, [name]: value }));
+    };
+
+    // Handler untuk Select
+    const handleSelectChange = (e: SelectChangeEvent<string>) => {
+        const { name, value } = e.target;
+        if (name) {
+            setFormData((prevState) => ({ ...prevState, [name]: value }));
+        }
     };
 
     const handleSave = () => {
         onSubmit(formData);
         setFormData({
-            categoryName: '',
-            description: '',
-            status: 'Active',
-            parentCategory: 'None',
+            id: uuidv4(),
+            categoryName: "",
+            description: "",
+            status: "Active",
+            parentId: "None",
         });
         onClose();
     };
 
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-end bg-black bg-opacity-50">
-            <div className="bg-white w-96 max-w-lg h-full shadow-lg p-6">
-                <div className="mb-4 flex items-center justify-between">
-                    <h2 className="text-xl font-semibold text-gray-600 ">Edit Category</h2>
-                    <button
-                        onClick={onClose}
-                    >
-                        <XMarkIcon className="h-6 w-6" />
-                    </button>
-                </div>
-                <hr className="flex bg-slate-700" />
-                <div className="mt-5 space-y-4">
-                    <TextInput
-                        type="text"
-                        id="categoryName"
+        <Drawer anchor="right" open={isOpen} onClose={onClose}>
+            <Box sx={{ width: 400, p: 3 }}>
+                {/* Header */}
+                <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
+                    <Typography variant="h6" fontWeight="bold">
+                        Add Category
+                    </Typography>
+                    <IconButton onClick={onClose}>
+                        <XMarkIcon className="h-5 w-5" />
+                    </IconButton>
+                </Stack>
+
+                {/* Form */}
+                <Stack spacing={3}>
+                    <TextField
+                        fullWidth
                         label="Category Name"
                         name="categoryName"
                         value={formData.categoryName}
                         onChange={handleInputChange}
                     />
-                    <TextInput
-                        type="text"
-                        id="description"
+                    <TextField
+                        fullWidth
                         label="Description"
                         name="description"
                         value={formData.description}
                         onChange={handleInputChange}
+                        multiline
+                        rows={3}
                     />
-                    <SelectInput
-                        label="Status"
-                        name="status"
-                        value={formData.status}
-                        onChange={handleInputChange}
-                        options={['Active', 'Inactive']}
-                    />
-                    <SelectInput
-                        label="Parent Category"
-                        name="parentCategory"
-                        value={formData.parentCategory}
-                        onChange={handleInputChange}
-                        options={['None', ...parentOptions]}
-                    />
-                </div>
 
-                <div className="mt-6 flex justify-start gap-4">
+                    <FormControl fullWidth>
+                        <InputLabel>Status</InputLabel>
+                        <Select name="status" value={formData.status} onChange={handleSelectChange}>
+                            <MenuItem value="Active">Active</MenuItem>
+                            <MenuItem value="Inactive">Inactive</MenuItem>
+                        </Select>
+                    </FormControl>
+
+                    <FormControl fullWidth>
+                        <InputLabel>Parent Category</InputLabel>
+                        <Select name="parentId" value={formData.parentId} onChange={handleSelectChange}>
+                            <MenuItem value="None">None</MenuItem>
+                            {parentOptions
+                                .filter((option) => option.parentId === "None") // Hanya menampilkan kategori induk
+                                .map((option) => (
+                                    <MenuItem key={option.id} value={option.id}>
+                                        {option.name}
+                                    </MenuItem>
+                                ))}
+                        </Select>
+                    </FormControl>
+                </Stack>
+
+                {/* Action Buttons */}
+                <Stack direction="row" justifyContent="flex-start" gap={2} mt={4}>
                     <button
                         onClick={onClose}
                         className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300"
@@ -104,9 +137,9 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
                     >
                         Save
                     </button>
-                </div>
-            </div>
-        </div>
+                </Stack>
+            </Box>
+        </Drawer>
     );
 };
 
