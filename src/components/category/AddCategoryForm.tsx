@@ -39,7 +39,7 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
         categoryName: "",
         description: "",
         isActive: true,
-        parentId: "None",
+        parentId: "",
     });
 
     // Handler untuk TextField
@@ -68,7 +68,7 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
             categoryName: "",
             description: "",
             isActive: true,
-            parentId: "None",
+            parentId: "",
         });
         onClose();
     };
@@ -120,7 +120,7 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
                     <FormControl fullWidth>
                         <InputLabel>Parent Category</InputLabel>
                         <Select name="parentId" value={formData.parentId} onChange={handleSelectChange}>
-                            <MenuItem value="None">None</MenuItem>
+                            <MenuItem value="">None</MenuItem>
                             {parentOptions
                                 .filter((option) => option.parentId === null) // Hanya menampilkan kategori induk
                                 .map((option) => (

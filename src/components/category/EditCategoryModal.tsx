@@ -8,12 +8,7 @@ interface EditCategoryModalProps {
     onClose: () => void;
     category?: CategoryType;
     parentOptions: CategoryType[];
-    onSave: (formData: {
-        updatedName: string;
-        description: string;
-        isActive: boolean;
-        parentId: string;
-    }) => void;
+    onSave: (formData: CategoryType) => void;
 }
 
 const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
@@ -23,8 +18,9 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
     parentOptions,
     onSave,
 }) => {
-    const [formData, setFormData] = useState({
-        updatedName: category?.name || '',
+    const [formData, setFormData] = useState<CategoryType>({
+        id: category?.id || "",
+        name: category?.name || '',
         description: category?.description || '',
         isActive: category?.isActive || false,
         parentId: category?.parentId || 'None',
@@ -33,7 +29,8 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
     useEffect(() => {
         if (isOpen) {
             setFormData({
-                updatedName: category?.name || '',
+                id: category?.id || "",
+                name: category?.name || '',
                 description: category?.description || '',
                 isActive: category?.isActive || false,
                 parentId: category?.parentId || 'None',
@@ -58,7 +55,7 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
     };
 
     const handleSave = () => {
-        if (!formData.updatedName.trim()) {
+        if (!formData.name.trim()) {
             alert("Category name cannot be empty.");
             return;
         }
@@ -81,8 +78,8 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
                     <TextField
                         fullWidth
                         label="Category Name"
-                        name="updatedName"
-                        value={formData.updatedName}
+                        name="name"
+                        value={formData.name}
                         onChange={handleInputChange}
                     />
 
@@ -113,7 +110,7 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
                         <InputLabel>Parent Category</InputLabel>
                         <Select
                             name="parentId"
-                            value={formData.parentId}
+                            value={formData.parentId || ""}
                             onChange={handleSelectChange}
                         >
                             <MenuItem value="None">None</MenuItem>

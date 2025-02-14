@@ -1,10 +1,15 @@
 import axios from "axios";
+
 const API_KEY = process.env.X_API_KEY || "yEYaZ3R4Eq1NlQXhFXFk9kAcFzZy9uoZ";
 
-export const getProduct = async () => {
+export const authLogin = async (email: string, password: string) => {
   try {
+    const authData = {
+      email,
+      password,
+    };
     // Lakukan permintaan API menggunakan storeId
-    const response = await axios.get("/api/products", {
+    const response = await axios.post("/api/auth/login", authData, {
       headers: {
         "Content-Type": "application/json",
         "x-api-key": API_KEY,

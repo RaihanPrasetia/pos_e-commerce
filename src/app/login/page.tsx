@@ -1,17 +1,25 @@
 'use client';
 
+import { useState, useEffect } from "react";
 import SlideCheckbox from "@/components/checkbox/SlideCheckbox";
-import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext"; // Import useAuth hook
+import { useAuth } from "@/contexts/AuthContext";
 import { TextInput } from "@/components/form/Input";
+import { authLogin } from "@/libs/service/authService";
 
 export default function Login() {
-    const { login } = useAuth(); // Get login method from AuthContext
-    const [email, setEmail] = useState<string>("admin@example.com");
-    const [password, setPassword] = useState<string>("password");
+    const { login } = useAuth();
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
     const [isChecked, setIsChecked] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(false); // For handling loading state
-    const [error, setError] = useState<string | null>(null); // For handling errors
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
+    if (!isClient) return null; // Hindari rendering di server
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsChecked(event.target.checked);
@@ -20,12 +28,16 @@ export default function Login() {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setIsLoading(true);
-        setError(null); // Reset errors before trying login
+        setError(null);
 
         try {
-            // Pass dummy credentials (example email and password)
-            await login("dummy-token", { id: "1", name: "User", email, password });
+            const response = await authLogin(email, password);
 
+            if (response.status !== 200) { // Gunakan status code untuk validasi
+                throw new Error(response.message || "Login failed");
+            }
+
+            login(response.user);
         } catch (err) {
             setError(`${err}`);
         } finally {
@@ -107,8 +119,7 @@ export default function Login() {
                             &quot;Attention is the new currency&quot;
                         </h4>
                         <p className="text-sm text-white">
-                            The more effortless the writing looks, the more effort the
-                            writer actually put into the process.
+                            The more effortless the writing looks, the more effort the writer actually put into the process.
                         </p>
                     </div>
                 </div>

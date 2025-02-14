@@ -3,15 +3,15 @@ import Pagination from '@/components/pagination/Pagination';
 import EditCategoryModal from '@/components/category/EditCategoryModal';
 import AddCategoryForm from '@/components/category/AddCategoryForm';
 import { ChevronDownIcon, ChevronUpIcon, PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/20/solid';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SelectInput from '@/components/form/SelectInput';
 import { CategoryType } from '@type/categoryTypes';
 import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2';
-import { initialCategories } from '@/libs/fake-db/categoryDb';
+import { createCategory, getCategory, updateCategory } from '@/libs/service/categoryService';
 
 export default function ListCategory() {
-    const [categories, setCategories] = useState<CategoryType[]>(initialCategories);
+    const [categories, setCategories] = useState<CategoryType[]>([]);
     const [pagination, setPagination] = useState<number>(5);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [sortedBy, setSortedBy] = useState<string>('name');
@@ -21,6 +21,22 @@ export default function ListCategory() {
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
     const [currentCategory, setCurrentCategory] = useState<CategoryType | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+    useEffect(() => {
+        const fetchCategory = async () => {
+            try {
+                const response = await getCategory()
+                console.log(response)
+                if (response && response.categories) (
+                    setCategories(response.categories)
+                )
+            } catch (error) {
+                console.error("Error fetch category :", error)
+            }
+        }
+        fetchCategory()
+    }, []);
 
     const handleEditCategory = (category: CategoryType) => {
         setCurrentCategory(category);
@@ -33,35 +49,75 @@ export default function ListCategory() {
         isActive: boolean;
         parentId: string;
     }) => {
-        setCategories((prev) =>
-            prev.map((cat) =>
-                cat.id === currentCategory?.id
-                    ? { ...cat, name: formData.updatedName, description: formData.description, isActive: formData.isActive, parentId: formData.parentId }
-                    : cat
-            )
-        );
-        setIsEditModalOpen(false);
+        try {
+
+            setCategories((prev) =>
+                prev.map((cat) =>
+                    cat.id === currentCategory?.id
+                        ? { ...cat, name: formData.updatedName, description: formData.description, isActive: formData.isActive, parentId: formData.parentId }
+                        : cat
+                )
+            );
+            setIsEditModalOpen(false);
+        } catch (error) {
+            console.error("Error add product :", error)
+        }
+
     };
 
-    const handleAddCategory = (formData: { categoryName: string; description: string; isActive: boolean; parentId: string }) => {
-        const newId = uuidv4();
-        setCategories([
-            ...categories,
-            {
-                id: newId,
-                name: formData.categoryName,
-                description: formData.description,
-                isActive: formData.isActive,
-                parentId: formData.parentId
-            }
-        ]);
-        Swal.fire({
-            title: 'Success!',
-            text: `Category "${formData.categoryName}" has been added.`,
-            icon: 'success',
-            confirmButtonText: 'OK'
-        });
-        setIsModalOpen(false);
+    const handleUpdateCategory = async (formData: CategoryType) => {
+        try {
+            const update = await updateCategory(formData.id, formData.name, formData.description, formData.isActive, formData.parentId)
+            setCategories((prev) =>
+                prev.map((cat) =>
+                    cat.id === currentCategory?.id
+                        ? { ...cat, name: formData.name, description: formData.description, isActive: formData.isActive, parentId: formData.parentId }
+                        : cat
+                )
+            );
+        } catch (error) {
+            console.error("Error update category")
+        }
+    }
+
+    const handleAddCategory = async (formData: {
+        categoryName: string;
+        description: string;
+        isActive: boolean;
+        parentId: string
+    }) => {
+        try {
+            // Kirim data ke API
+            const newCategory = await createCategory(
+                formData.categoryName,
+                formData.description,
+                formData.isActive,
+                formData.parentId
+            );
+
+            // Update state hanya jika API sukses
+            setCategories((prevCategories) => [...prevCategories, newCategory.category]);
+
+            // Notifikasi sukses
+            Swal.fire({
+                title: "Success!",
+                text: `Category "${formData.categoryName}" has been added.`,
+                icon: "success",
+                confirmButtonText: "OK",
+            });
+
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error("Failed to add category:", error);
+
+            // Notifikasi error
+            Swal.fire({
+                title: "Error!",
+                text: "Failed to add category. Please try again.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
     };
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -361,7 +417,7 @@ export default function ListCategory() {
                     isOpen={isEditModalOpen}
                     onClose={() => setIsEditModalOpen(false)}
                     category={currentCategory ? currentCategory : undefined}
-                    onSave={handleSaveCategory}
+                    onSave={handleUpdateCategory}
                     parentOptions={categories} // List Parent Categories
                 />
             </div>

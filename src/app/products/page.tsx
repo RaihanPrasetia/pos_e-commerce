@@ -22,13 +22,8 @@ export default function ListProduct() {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = getProduct();
-                if (response) (
-                    setProducts(response)
-                )
-                else (
-                    setProducts([])
-                )
+                const response = await getProduct();
+                setProducts(response.products)
             } catch (error) {
                 console.error("Error fetching products:", error);
             }

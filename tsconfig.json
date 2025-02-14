@@ -17,6 +17,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "strictNullChecks": true,
     "plugins": [
       {
         "name": "next"
@@ -32,6 +33,9 @@
       "@service/*": [
         "./src/libs/service/*"
       ],
+      "@fake-db/*": [
+        "./src/libs/fake-db/*"
+      ]
     }
   },
   "include": [

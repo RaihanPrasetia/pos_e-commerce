@@ -4,5 +4,4 @@ export type CategoryType = {
   description: string;
   isActive: boolean;
   parentId: string | null;
-  isChecked?: boolean;
 };
