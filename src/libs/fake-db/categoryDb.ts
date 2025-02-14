@@ -40,7 +40,7 @@ export let initialCategories: CategoryType[] = [
     "id": "C006",
     "description": "Desc Category 6",
     "name": "Adventure",
-    "parentId": "C004",
+    "parentId": null,
     "isActive": false
   },
   {

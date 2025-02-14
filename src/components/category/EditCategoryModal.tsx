@@ -23,7 +23,7 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
         name: category?.name || '',
         description: category?.description || '',
         isActive: category?.isActive || false,
-        parentId: category?.parentId || 'None',
+        parentId: category?.parentId || '',
     });
 
     useEffect(() => {
@@ -33,7 +33,7 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
                 name: category?.name || '',
                 description: category?.description || '',
                 isActive: category?.isActive || false,
-                parentId: category?.parentId || 'None',
+                parentId: category?.parentId || '',
             });
         }
     }, [isOpen, category]);
@@ -113,7 +113,7 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
                             value={formData.parentId || ""}
                             onChange={handleSelectChange}
                         >
-                            <MenuItem value="None">None</MenuItem>
+                            <MenuItem value="">None</MenuItem>
                             {parentOptions
                                 .filter((option) => option.parentId === null)
                                 .map((option) => (
