@@ -7,7 +7,7 @@ import {
     Bars3CenterLeftIcon,
     ShoppingCartIcon,
     CogIcon,
-    ArrowLeftEndOnRectangleIcon,
+    ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/20/solid";
 import { useAuth } from "@/contexts/AuthContext"; // Import useAuth hook
 import { useRouter, usePathname } from "next/navigation";
@@ -33,6 +33,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
     const [isSidebarActive, setSidebarActive] = useState(false);
     const [isNotificationOpen, setNotificationOpen] = useState(false);
     const [isDropdownOpen, setDropdownOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
 
     // Refs untuk dropdown notification dan profil
     const notificationRef = useRef<HTMLDivElement>(null);
@@ -86,8 +87,24 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         };
     }, []);
 
+    // Handle scroll event to change navbar style
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 0) {
+                setIsScrolled(true);
+            } else {
+                setIsScrolled(false);
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
     return (
-        <nav className="flex items-center justify-between bg-transparent px-4 py-6 text-white">
+        <nav className={`flex items-center justify-between px-4 py-6 transition-all duration-300 ${isScrolled ? "fixed z-50 right-0 mx-14 bg-white shadow-md rounded-md mt-2" : "bg-transparent text-white"}`}>
             {/* Konten Navbar (toggleSidebar, breadcrumb) */}
             <div className="flex items-center space-x-6">
                 {/* Tombol Toggle Sidebar */}
@@ -234,7 +251,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                                     className="flex items-center bg-gradient-to-r from-rose-500 via-rose-500 to-red-600 text-white rounded-md p-3 hover:brightness-110 cursor-pointer"
 
                                 >
-                                    <ArrowLeftEndOnRectangleIcon className="h-5 w-5 mr-2 text-slate-200" />
+                                    <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-2 text-slate-200" />
                                     <span>Logout</span>
                                 </li>
                             </ul>

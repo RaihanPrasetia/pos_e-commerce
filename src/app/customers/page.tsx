@@ -31,8 +31,8 @@ const CustomerLayout = () => {
         router.push('/customers/add');
     };
 
-    const handleToEditCustomer = (customer: CustomerType) => {
-        router.push(`/customers/edit/${customer.id}`);
+    const handleToEditCustomer = (customerId: string) => {
+        router.push(`/customers/edit?customerId=${customerId}`);
     };
 
     const handleDeleteCustomer = (id: string, name: string) => {

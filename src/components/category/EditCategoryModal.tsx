@@ -7,11 +7,11 @@ interface EditCategoryModalProps {
     isOpen: boolean;
     onClose: () => void;
     category?: CategoryType;
-    parentOptions: CategoryType[]; // Tambahkan daftar kategori parent
+    parentOptions: CategoryType[];
     onSave: (formData: {
         updatedName: string;
         description: string;
-        status: string;
+        isActive: boolean;
         parentId: string;
     }) => void;
 }
@@ -26,7 +26,7 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
     const [formData, setFormData] = useState({
         updatedName: category?.name || '',
         description: category?.description || '',
-        status: category?.status || 'Active',
+        isActive: category?.isActive || false,
         parentId: category?.parentId || 'None',
     });
 
@@ -35,7 +35,7 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
             setFormData({
                 updatedName: category?.name || '',
                 description: category?.description || '',
-                status: category?.status || 'Active',
+                isActive: category?.isActive || false,
                 parentId: category?.parentId || 'None',
             });
         }
@@ -48,8 +48,13 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
 
     const handleSelectChange = (event: SelectChangeEvent) => {
         const { name, value } = event.target;
-        if (!name) return; // Pastikan name ada untuk menghindari error
+        if (!name) return;
         setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleStatusChange = (event: SelectChangeEvent) => {
+        const { value } = event.target;
+        setFormData((prev) => ({ ...prev, isActive: value === 'Active' }));
     };
 
     const handleSave = () => {
@@ -94,9 +99,9 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
                     <FormControl fullWidth>
                         <InputLabel>Status</InputLabel>
                         <Select
-                            name="status"
-                            value={formData.status || "Active"}
-                            onChange={handleSelectChange}
+                            name="isActive"
+                            value={formData.isActive ? 'Active' : 'Inactive'}
+                            onChange={handleStatusChange}
                         >
                             <MenuItem value="Active">Active</MenuItem>
                             <MenuItem value="Inactive">Inactive</MenuItem>
@@ -113,7 +118,7 @@ const EditCategoryModal: React.FC<EditCategoryModalProps> = ({
                         >
                             <MenuItem value="None">None</MenuItem>
                             {parentOptions
-                                .filter((option) => option.parentId === "None") // Filter hanya parent kategori
+                                .filter((option) => option.parentId === null)
                                 .map((option) => (
                                     <MenuItem key={option.id} value={option.id}>
                                         {option.name}

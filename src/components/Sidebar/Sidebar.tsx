@@ -9,6 +9,7 @@ import {
     PlusIcon,
     ListBulletIcon,
     TagIcon,
+    ChevronDownIcon,
 } from "@heroicons/react/16/solid";
 import Image from "next/image";
 
@@ -25,7 +26,7 @@ const menuItems = [
         ],
     },
     { name: "Pesanan", href: "/orders", icon: ClipboardDocumentListIcon },
-    { name: "Pelanggan", href: "/customers/list", icon: UserIcon },
+    { name: "Pelanggan", href: "/customers", icon: UserIcon },
     { name: "Pengaturan", href: "/settings", icon: CogIcon },
 ];
 
@@ -75,19 +76,21 @@ export default function Sidebar({ isOpen }: SidebarProps) {
                     {menuItems.map((item) => {
                         const hasSubMenu = item.subMenu && item.subMenu.length > 0;
                         const isActive =
-                            pathname === item.href || (hasSubMenu && item.subMenu.some((subItem) => pathname === subItem.href));
+                            pathname === item.href ||
+                            (hasSubMenu && item.subMenu.some((subItem) => pathname === subItem.href)) ||
+                            (item.href === "/customers" && pathname.startsWith("/customers")) ||
+                            (item.href === "/products" && pathname.startsWith("/products"));
 
                         return (
                             <li key={item.name}>
                                 {/* Menu Utama */}
                                 <button
                                     onClick={() => (hasSubMenu ? toggleDropdown(item.name) : router.push(item.href))}
-                                    className={`flex items-center w-full px-3 py-2 space-x-3 rounded-xl text-sm font-semibold transition-all duration-300 ease-in-out ${isActive
+                                    className={`flex justify-start items-center w-full px-3 py-2 space-x-3 rounded-xl text-sm font-semibold transition-all duration-300 ease-in-out ${isActive
                                         ? `${isOpen ? "bg-purple-200 text-purple-700 shadow-mui-customShadow" : "text-gray-900"}`
                                         : "hover:bg-gray-100 text-gray-700"
                                         }`}
                                 >
-
                                     <div
                                         className={`p-2 rounded-lg transition-all duration-300 ${isActive
                                             ? "text-white bg-gradient-to-br from-pink-500 to-purple-700 shadow-lg"
@@ -96,7 +99,16 @@ export default function Sidebar({ isOpen }: SidebarProps) {
                                     >
                                         <item.icon className="w-5 h-5" />
                                     </div>
-                                    {isOpen && <span>{item.name}</span>}
+                                    <div className="flex items-center justify-between w-full">
+                                        {isOpen && <span>{item.name}</span>}
+
+                                        {hasSubMenu && isOpen && (
+                                            <ChevronDownIcon
+                                                className={`w-5 h-5 ml-auto flex justify-end transition-transform duration-300 ${activeDropdown === item.name ? "transform rotate-180" : ""
+                                                    }`}
+                                            />
+                                        )}
+                                    </div>
                                 </button>
 
                                 {/* Submenu */}

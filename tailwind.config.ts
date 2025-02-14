@@ -15,10 +15,12 @@ export default {
           "rgba(145, 158, 171, 0.3) 0px 0px 2px 0px, rgba(145, 158, 171, 0.02) 0px 12px 24px -4px",
         sm: "0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)",
         "btn-shadow": "box-shadow: rgba(0, 0, 0, .05) 0 9px 17.5px",
-        "mui-customShadow": "0px 2px 10px rgba(var(--mui-mainColorChannels-lightShadow))",
+        "mui-customShadow":
+          "0px 2px 10px rgba(var(--mui-mainColorChannels-lightShadow))",
 
         // "shadow-full" uses rgba that can be customized with JS variables
-        "shadow-full": "0px 10px 30px rgba(var(--mui-mainColorChannels-lightShadow), 0.3)",
+        "shadow-full":
+          "0px 10px 30px rgba(var(--mui-mainColorChannels-lightShadow), 0.3)",
       },
       borderRadius: {
         sm: "7px",

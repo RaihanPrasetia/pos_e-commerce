@@ -1,31 +1,42 @@
-"use client"
+"use client";
 
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronUpIcon, ChevronDownIcon, PlusIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid'; // Import Hero Icons
 import { useRouter } from 'next/navigation';
 import Pagination from '@/components/pagination/Pagination';
 import SelectInput from '@/components/form/SelectInput';
-// Example product data
-const products = [
-    { id: 1, name: 'Product A', category: 'Category 1', price: '$20', code: 'P001', qty: 10, status: 'Available', imageUrl: 'https://picsum.photos/50' },
-    { id: 2, name: 'Product B', category: 'Category 2', price: '$30', code: 'P002', qty: 5, status: 'Out of stock', imageUrl: 'https://picsum.photos/50' },
-    { id: 3, name: 'Product C', category: 'Category 3', price: '$40', code: 'P003', qty: 8, status: 'Available', imageUrl: 'https://picsum.photos/50' },
-    { id: 4, name: 'Product D', category: 'Category 4', price: '$50', code: 'P004', qty: 12, status: 'Available', imageUrl: 'https://picsum.photos/50' },
-    { id: 5, name: 'Product E', category: 'Category 5', price: '$60', code: 'P005', qty: 3, status: 'Out of stock', imageUrl: 'https://picsum.photos/50' },
-    { id: 6, name: 'Product F', category: 'Category 6', price: '$70', code: 'P006', qty: 15, status: 'Available', imageUrl: 'https://picsum.photos/50' },
-];
+import { ProductType } from '@type/productTypes';
+import { getProduct } from '@service/productService';
 
 export default function ListProduct() {
+    const [products, setProducts] = useState<ProductType[]>([]);
     const [pagination, setPagination] = useState(5); // Pagination options
     const [searchTerm, setSearchTerm] = useState(''); // Search term
-    const [selectedProducts, setSelectedProducts] = useState<number[]>([]); // Selected products state
+    const [selectedProducts, setSelectedProducts] = useState<string[]>([]); // Selected products state
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc'); // Sort order state
     const [sortedBy, setSortedBy] = useState<string>('name'); // Sorted column state
     const router = useRouter();
     const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const handleToEdit = (productId: number) => {
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const response = getProduct();
+                if (response) (
+                    setProducts(response)
+                )
+                else (
+                    setProducts([])
+                )
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+        fetchProduct();
+    }, []);
+
+    const handleToEdit = (productId: string) => {
         // Navigate to the edit product page with the product ID
         router.push(`/products/edit-product?id=${productId}`);
     };
@@ -34,12 +45,11 @@ export default function ListProduct() {
         router.push('/products/new-product');
     };
 
-
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
     };
 
-    const handleSelectProduct = (productId: number) => {
+    const handleSelectProduct = (productId: string) => {
         setSelectedProducts((prevSelectedProducts) =>
             prevSelectedProducts.includes(productId)
                 ? prevSelectedProducts.filter((id) => id !== productId) // Unselect product
@@ -55,12 +65,12 @@ export default function ListProduct() {
     };
 
     // Filter products based on search term
-    const filteredProducts = products.filter((product) =>
+    const filteredProducts = products?.filter((product) =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // Sort products based on the sortOrder and sortedBy
-    const sortedProducts = filteredProducts.sort((a, b) => {
+    const sortedProducts = filteredProducts?.sort((a, b) => {
         if (sortOrder === 'asc') {
             return a[sortedBy as keyof typeof a] > b[sortedBy as keyof typeof b] ? 1 : -1;
         } else {
@@ -69,8 +79,6 @@ export default function ListProduct() {
     });
 
     const totalPages = Math.ceil(sortedProducts.length / pagination);
-
-
 
     return (
         <>
@@ -163,7 +171,7 @@ export default function ListProduct() {
                                         }}
                                     />
                                 </th>
-                                {['name', 'category', 'price', 'code', 'qty', 'status'].map((column) => (
+                                {['name', 'category', 'price', 'code', 'isActive'].map((column) => (
                                     <th key={column} className="py-2 px-4 text-left text-sm font-semibold text-slate-400">
                                         <div className="flex justify-between items-center">
                                             <span>{column.charAt(0).toUpperCase() + column.slice(1)}</span>
@@ -195,28 +203,25 @@ export default function ListProduct() {
                                         </td>
                                         <td className="py-2 px-4">
                                             <div className="flex space-x-4 items-center">
-                                                <Image src={product.imageUrl} alt={product.name} width={10} height={10} className="w-10 h-10 rounded-full" />
+                                                <Image src={product.imageUrl} alt={product.name} width={52} height={52} className="w-10 h-10 rounded-full" />
                                                 <span className="text-sm font-semibold text-slate-500">{product.name}</span>
                                             </div>
                                         </td>
-                                        <td className="py-2 px-4 text-sm text-slate-500 w-px">{product.category}</td>
-                                        <td className="py-2 px-4 text-sm text-slate-500 w-px">{product.price}</td>
-                                        <td className="py-2 px-4 text-sm text-slate-500 w-px">{product.code}</td>
-                                        <td className="py-2 px-4 text-sm text-slate-500 w-px">{product.qty}</td>
+                                        <td className="py-2 px-4 text-sm text-slate-500">{product.category.name}</td>
+                                        <td className="py-2 px-4 text-sm text-slate-500">{product.price}</td>
+                                        <td className="py-2 px-4 text-sm text-slate-500">{product.code}</td>
                                         <td className="py-2 px-4 text-sm w-52 text-center">
                                             <div className='flex space-x-2 items-center'>
                                                 <span
-                                                    className={`status-badge ${product.status === 'Available'
+                                                    className={`status-badge ${product.isActive
                                                         ? 'status-active'
-                                                        : product.status === 'Out of stock'
-                                                            ? 'status-inactive'
-                                                            : 'status-default'
+                                                        : 'status-inactive'
                                                         }`}
                                                 >
                                                 </span>
 
                                                 <span className='text-slate-400 font-medium'>
-                                                    {product.status}
+                                                    {product.isActive ? 'Active' : 'Inactive'}
                                                 </span>
                                             </div>
                                         </td>
@@ -255,6 +260,5 @@ export default function ListProduct() {
                 </div>
             </div>
         </>
-
     );
 }

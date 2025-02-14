@@ -22,7 +22,7 @@ interface AddCategoryFormProps {
     onSubmit: (formData: {
         categoryName: string;
         description: string;
-        status: string;
+        isActive: boolean;
         parentId: string;
     }) => void;
     parentOptions: CategoryType[]; // List parent categories
@@ -38,7 +38,7 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
         id: "",
         categoryName: "",
         description: "",
-        status: "Active",
+        isActive: true,
         parentId: "None",
     });
 
@@ -56,13 +56,18 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
         }
     };
 
+    const handleStatusChange = (e: SelectChangeEvent<string>) => {
+        const { value } = e.target;
+        setFormData((prevState) => ({ ...prevState, isActive: value === "true" }));
+    };
+
     const handleSave = () => {
         onSubmit(formData);
         setFormData({
             id: uuidv4(),
             categoryName: "",
             description: "",
-            status: "Active",
+            isActive: true,
             parentId: "None",
         });
         onClose();
@@ -102,9 +107,13 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
 
                     <FormControl fullWidth>
                         <InputLabel>Status</InputLabel>
-                        <Select name="status" value={formData.status} onChange={handleSelectChange}>
-                            <MenuItem value="Active">Active</MenuItem>
-                            <MenuItem value="Inactive">Inactive</MenuItem>
+                        <Select
+                            name="isActive"
+                            value={formData.isActive ? "true" : "false"}
+                            onChange={handleStatusChange}
+                        >
+                            <MenuItem value="true">Active</MenuItem>
+                            <MenuItem value="false">Inactive</MenuItem>
                         </Select>
                     </FormControl>
 
@@ -113,7 +122,7 @@ const AddCategoryForm: React.FC<AddCategoryFormProps> = ({
                         <Select name="parentId" value={formData.parentId} onChange={handleSelectChange}>
                             <MenuItem value="None">None</MenuItem>
                             {parentOptions
-                                .filter((option) => option.parentId === "None") // Hanya menampilkan kategori induk
+                                .filter((option) => option.parentId === null) // Hanya menampilkan kategori induk
                                 .map((option) => (
                                     <MenuItem key={option.id} value={option.id}>
                                         {option.name}

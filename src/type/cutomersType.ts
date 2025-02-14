@@ -8,6 +8,7 @@ export type CustomerType = {
   state: string;
   zip: string;
   country: string;
+  imageUrl: string;
   createdAt: string;
   updatedAt: string;
 };

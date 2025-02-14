@@ -29,6 +29,9 @@
       "@type/*": [
         "./src/type/*"
       ],
+      "@service/*": [
+        "./src/libs/service/*"
+      ],
     }
   },
   "include": [

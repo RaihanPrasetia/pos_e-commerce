@@ -8,18 +8,7 @@ import SelectInput from '@/components/form/SelectInput';
 import { CategoryType } from '@type/categoryTypes';
 import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2';
-
-// Defining the interface for Category type
-
-
-const initialCategories: CategoryType[] = [
-    { id: '1', name: 'Category A', description: 'Description A', status: 'Active', parentId: 'None' },
-    { id: '2', name: 'Category B', description: 'Description B', status: 'Inactive', parentId: 'None' },
-    { id: '3', name: 'Category C', description: 'Description C', status: 'Active', parentId: 'None' },
-    { id: '4', name: 'Category D', description: 'Description D', status: 'Inactive', parentId: '1' },
-    { id: '5', name: 'Category E', description: 'Description E', status: 'Active', parentId: '2' },
-    { id: '6', name: 'Category F', description: 'Description F', status: 'Inactive', parentId: '3' },
-];
+import { initialCategories } from '@/libs/fake-db/categoryDb';
 
 export default function ListCategory() {
     const [categories, setCategories] = useState<CategoryType[]>(initialCategories);
@@ -41,20 +30,20 @@ export default function ListCategory() {
     const handleSaveCategory = (formData: {
         updatedName: string;
         description: string;
-        status: string;
+        isActive: boolean;
         parentId: string;
     }) => {
         setCategories((prev) =>
             prev.map((cat) =>
                 cat.id === currentCategory?.id
-                    ? { ...cat, name: formData.updatedName, description: formData.description, status: formData.status, parentId: formData.parentId }
+                    ? { ...cat, name: formData.updatedName, description: formData.description, isActive: formData.isActive, parentId: formData.parentId }
                     : cat
             )
         );
+        setIsEditModalOpen(false);
     };
 
-
-    const handleAddCategory = (formData: { categoryName: string; description: string; status: string; parentId: string }) => {
+    const handleAddCategory = (formData: { categoryName: string; description: string; isActive: boolean; parentId: string }) => {
         const newId = uuidv4();
         setCategories([
             ...categories,
@@ -62,7 +51,7 @@ export default function ListCategory() {
                 id: newId,
                 name: formData.categoryName,
                 description: formData.description,
-                status: formData.status,
+                isActive: formData.isActive,
                 parentId: formData.parentId
             }
         ]);
@@ -72,9 +61,8 @@ export default function ListCategory() {
             icon: 'success',
             confirmButtonText: 'OK'
         });
+        setIsModalOpen(false);
     };
-
-
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
@@ -95,7 +83,6 @@ export default function ListCategory() {
                 : [...prev, id]
         );
     };
-
 
     const handleDeleteSelectedCategories = () => {
         if (selectedCategories.length > 0) {
@@ -139,7 +126,7 @@ export default function ListCategory() {
                 });
             }
         });
-    }
+    };
 
     const sortedCategories = categories
         .filter((category) =>
@@ -276,10 +263,10 @@ export default function ListCategory() {
                                             <div className="flex justify-between items-center">
                                                 <span>Status</span>
                                                 <button
-                                                    onClick={() => handleSort('status')}
+                                                    onClick={() => handleSort('isActive')}
                                                     className="ml-2"
                                                 >
-                                                    {sortedBy === 'status' && sortOrder === 'asc' ? (
+                                                    {sortedBy === 'isActive' && sortOrder === 'asc' ? (
                                                         <ChevronUpIcon className="h-5 w-5 text-gray-500" />
                                                     ) : (
                                                         <ChevronDownIcon className="h-5 w-5 text-gray-500" />
@@ -320,16 +307,14 @@ export default function ListCategory() {
                                                 <td className="py-2 px-4 text-sm w-52 text-center">
                                                     <div className=' flex items-center space-x-2'>
                                                         <span
-                                                            className={`status-badge ${category.status === 'Active'
+                                                            className={`status-badge ${category.isActive
                                                                 ? 'status-active'
-                                                                : category.status === 'Inactive'
-                                                                    ? 'status-inactive'
-                                                                    : 'status-default'
+                                                                : 'status-inactive'
                                                                 }`}
                                                         >
                                                         </span>
 
-                                                        <span className='text-slate-400 font-medium'>{category.status}</span>
+                                                        <span className='text-slate-400 font-medium'>{category.isActive ? 'Active' : 'Inactive'}</span>
                                                     </div>
                                                 </td>
                                                 <td className="py-2 px-4 text-sm space-x-3 flex">
@@ -368,11 +353,9 @@ export default function ListCategory() {
                 <AddCategoryForm
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
-                    onSubmit={({ categoryName, description, status, parentId }) => handleAddCategory({ categoryName, description, status, parentId })}
+                    onSubmit={({ categoryName, description, isActive, parentId }) => handleAddCategory({ categoryName, description, isActive, parentId })}
                     parentOptions={categories} // List Parent Categories
                 />
-
-
 
                 <EditCategoryModal
                     isOpen={isEditModalOpen}
@@ -381,7 +364,6 @@ export default function ListCategory() {
                     onSave={handleSaveCategory}
                     parentOptions={categories} // List Parent Categories
                 />
-
             </div>
         </>
     );

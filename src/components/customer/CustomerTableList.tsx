@@ -1,5 +1,7 @@
 import { CustomerType } from '@/type/cutomersType'
 import { ChevronDownIcon, ChevronUpIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/16/solid'
+import { Avatar, Typography } from '@mui/material'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 interface CustomerTableListProps {
@@ -13,11 +15,17 @@ interface CustomerTableListProps {
     sortedCustomers: CustomerType[]
     currentPage: number
     pagination: number
-    handleEditCustomer: (customer: CustomerType) => void
+    handleEditCustomer: (customerId: string) => void
     handleDeleteCustomer: (id: string, name: string) => void
 }
 
 function CustomerTableList({ customers, selectedCustomers, handleSelectAllCustomers, handleSelectCustomers, handleSort, sortedBy, sortOrder, sortedCustomers, currentPage, pagination, handleEditCustomer, handleDeleteCustomer }: CustomerTableListProps) {
+    const router = useRouter();
+
+    const handleNavigateToCustomer = (id: string) => {
+        router.push(`/customers/detail?customerId=${id}`);
+    };
+
     return (
         <div className="card-body px-4 flex-grow">
             {customers.length === 0 ? (
@@ -113,7 +121,14 @@ function CustomerTableList({ customers, selectedCustomers, handleSelectAllCustom
                                     </td>
                                     <td className="py-2 px-4">
                                         <div className="flex space-x-4 items-center">
-                                            <span className="text-sm font-semibold text-gray-500">{customer.name}</span>
+                                            <Avatar alt={customer.name} src={customer.imageUrl} className="w-10 h-10 bg-utama rounded-full" />
+                                            <Typography
+                                                variant='body2'
+                                                className="text-sm font-semibold text-gray-500 cursor-pointer text-utama-hover"
+                                                onClick={() => handleNavigateToCustomer(customer.id)}
+                                            >
+                                                {customer.name}
+                                            </Typography>
                                         </div>
                                     </td>
                                     <td className="py-2 px-4">
@@ -128,7 +143,7 @@ function CustomerTableList({ customers, selectedCustomers, handleSelectAllCustom
                                     <td className="py-2 px-4 text-sm space-x-3 flex">
                                         <button
                                             className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-br from-pink-500 to-purple-700 rounded-md shadow-md transition hover:brightness-110"
-                                            onClick={() => handleEditCustomer(customer)}
+                                            onClick={() => handleEditCustomer(customer.id)}
                                         >
                                             <PencilSquareIcon className="h-4 w-4" />
                                             <span>Edit</span>

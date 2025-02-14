@@ -3,7 +3,7 @@ import React from 'react'
 interface ContentHeadProps {
     title: string
     subTitle: string
-    children: React.ReactNode
+    children?: React.ReactNode
     flex?: boolean
     items?: string
     justify?: string
