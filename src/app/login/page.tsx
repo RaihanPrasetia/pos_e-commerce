@@ -1,25 +1,24 @@
 'use client';
 
-import { useState, useEffect } from "react";
 import SlideCheckbox from "@/components/checkbox/SlideCheckbox";
-import { useAuth } from "@/contexts/AuthContext";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext"; // Import useAuth hook
 import { TextInput } from "@/components/form/Input";
-import { authLogin } from "@/libs/service/authService";
 
 export default function Login() {
-    const { login } = useAuth();
+    const { login } = useAuth(); // Get login method from AuthContext
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [isChecked, setIsChecked] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false); // For handling loading state
+    const [error, setError] = useState<string | null>(null); // For handling errors
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
         setIsClient(true);
     }, []);
 
-    if (!isClient) return null; // Hindari rendering di server
+    if (!isClient) return null;
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsChecked(event.target.checked);
@@ -28,22 +27,31 @@ export default function Login() {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         setIsLoading(true);
-        setError(null);
+        setError(null); // Reset error sebelum login
 
         try {
-            const response = await authLogin(email, password);
+            const response = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
 
-            if (response.status !== 200) { // Gunakan status code untuk validasi
-                throw new Error(response.message || "Login failed");
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Login failed");
             }
 
-            login(response.user);
+            // Panggil fungsi login dengan token & data user dari API
+            login(data.token, data.user);
+
         } catch (err) {
             setError(`${err}`);
         } finally {
             setIsLoading(false);
         }
     };
+
 
     return (
         <main className="min-h-screen bg-cover bg-center gap-10 px-16 bg-gradient-to-r flex items-center justify-center transition-all duration-200">
@@ -119,7 +127,8 @@ export default function Login() {
                             &quot;Attention is the new currency&quot;
                         </h4>
                         <p className="text-sm text-white">
-                            The more effortless the writing looks, the more effort the writer actually put into the process.
+                            The more effortless the writing looks, the more effort the
+                            writer actually put into the process.
                         </p>
                     </div>
                 </div>

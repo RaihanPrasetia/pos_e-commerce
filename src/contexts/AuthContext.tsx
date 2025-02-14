@@ -7,7 +7,7 @@ import { userType } from '@/type/userTypes';
 interface AuthContextType {
   user: userType | null;
   isLoading: boolean;
-  login: (userData: userType) => void;
+  login: (token: string, userData: userType) => void;
   logout: () => void;
 }
 
@@ -32,8 +32,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(false);
   }, []);
 
-  const login = (userData: userType) => {
+  const login = (token: string, userData: userType) => {
     // Simpan token & user ke localStorage
+    localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(userData));
 
     // Simpan user ke state
