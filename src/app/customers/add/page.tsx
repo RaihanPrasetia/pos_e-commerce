@@ -6,7 +6,7 @@ import { ArrowLeftCircleIcon } from '@heroicons/react/16/solid'
 import React from 'react'
 import { BiMemoryCard } from 'react-icons/bi';
 
-export const NewCustomer = () => {
+const NewCustomer = () => {
 
     const handleBack = () => {
         window.history.back();

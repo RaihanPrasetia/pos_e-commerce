@@ -1,3 +1,5 @@
+"use client"
+
 import SelectInput from '@/components/form/SelectInput'
 import Pagination from '@/components/pagination/Pagination'
 import { getOrderByCustomerId } from '@/libs/service/orderService'
