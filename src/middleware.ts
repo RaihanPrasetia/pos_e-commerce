@@ -5,29 +5,38 @@ const API_KEY = process.env.X_API_KEY || "my-secure-api-key";
 
 export function middleware(req: NextRequest) {
   const session = req.cookies.get("session_user");
+  const { pathname } = req.nextUrl;
 
-  if (req.nextUrl.pathname.startsWith("/api/auth")) {
+  // **Handle API Routes**
+  if (pathname.startsWith("/api")) {
+    if (pathname.startsWith("/api/auth")) {
+      return NextResponse.next();
+    }
+
+    const apiKey = req.headers.get("x-api-key");
+    if (!apiKey || apiKey !== API_KEY) {
+      return NextResponse.json({ message: "Invalid API Key" }, { status: 403 });
+    }
+
+    if (!session && !pathname.startsWith("/api/auth/login")) {
+      return NextResponse.json(
+        { message: "Unauthorized: Please log in" },
+        { status: 401 }
+      );
+    }
+
     return NextResponse.next();
   }
 
-  // **Cek API Key**
-  const apiKey = req.headers.get("x-api-key");
-  if (!apiKey || apiKey !== API_KEY) {
-    return NextResponse.json({ message: "Invalid API Key" }, { status: 403 });
-  }
-
-  // Jika user mencoba mengakses endpoint selain `/api/auth/login`
-  if (!session && !req.nextUrl.pathname.startsWith("/api/auth/login")) {
-    return NextResponse.json(
-      { message: "Unauthorized: Please log in" },
-      { status: 401 }
-    );
+  // **Redirect ke login jika tidak ada sesi**
+  if (!session) {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   return NextResponse.next();
 }
 
-// Terapkan middleware hanya untuk API endpoint
+// Terapkan middleware hanya untuk halaman yang perlu autentikasi
 export const config = {
-  matcher: ["/api/:path*"],
+  matcher: ["/dashboard/:path*", "/profile/:path*", "/api/:path*"],
 };

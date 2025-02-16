@@ -7,8 +7,8 @@ import { TextField } from "@mui/material";
 
 export default function Login() {
     const { login } = useAuth();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("admin@example.com");
+    const [password, setPassword] = useState("12345678");
     const [isChecked, setIsChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);

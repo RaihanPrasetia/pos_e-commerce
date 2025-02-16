@@ -12,6 +12,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext"; // Import useAuth hook
 import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
+import { authLogout } from "@/libs/service/authService";
 
 type NavbarProps = {
     toggleSidebar: () => void;
@@ -51,7 +52,8 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
     };
 
     // Function to handle logout
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        authLogout()
         logout();
     };
 

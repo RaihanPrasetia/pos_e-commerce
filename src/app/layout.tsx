@@ -4,21 +4,19 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import Navbar from "@/components/Navbar/Navbar";
+import Footer from "@/components/Footer/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import "./globals.css";
-import Footer from "@/components/Footer/Footer";
 
-export default function RootLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-    const [isSidebarOpen, setSidebarOpen] = useState(false); // Default sidebar tertutup
-    const [isSidebarFixed, setSidebarFixed] = useState(false); // Menonaktifkan hover saat toggle
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const [isSidebarFixed, setSidebarFixed] = useState(false);
     const pathname = usePathname();
 
-    // Jangan tampilkan Sidebar atau Navbar di halaman login
-    if (pathname === "/login") {
+    // **Halaman yang tidak memerlukan sidebar & navbar**
+    const hiddenLayoutPages = ["/dashboard", "/products", "/customers"];
+
+    if (!hiddenLayoutPages.some((route) => pathname.startsWith(route))) {
         return (
             <html lang="en">
                 <body>
@@ -39,8 +37,7 @@ export default function RootLayout({
                 <AuthProvider>
                     {/* Sidebar */}
                     <div
-                        className={`fixed h-full mt-3 transition-all duration-500 ease-in-out ${isSidebarOpen ? "w-64" : "w-16"
-                            }`}
+                        className={`fixed h-full mt-3 transition-all duration-500 ease-in-out ${isSidebarOpen ? "w-64" : "w-16"}`}
                         onMouseEnter={() => {
                             if (!isSidebarFixed) setSidebarOpen(true);
                         }}
@@ -51,10 +48,7 @@ export default function RootLayout({
                         <Sidebar isOpen={isSidebarOpen} />
                     </div>
 
-                    <div
-                        className={`flex flex-col min-h-screen flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? "ml-64" : "ml-16"
-                            }`}
-                    >
+                    <div className={`flex flex-col min-h-screen flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? "ml-64" : "ml-16"}`}>
                         {/* Navbar */}
                         <Navbar toggleSidebar={handleSidebarToggle} />
 

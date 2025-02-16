@@ -1,31 +1,28 @@
-// AuthContext.tsx
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { userType } from '@/type/userTypes';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { userType } from "@/type/userTypes";
 
-// Define the shape of your authentication context
+// Tipe data untuk konteks autentikasi
 interface AuthContextType {
+  isAuth: boolean
   user: userType | null;
   isLoading: boolean;
   login: (token: string, userData: userType) => void;
   logout: () => void;
 }
 
-// Define the user type
-
-
-// Initialize the context
+// Inisialisasi Context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// AuthProvider to wrap your application
+// Provider untuk membungkus aplikasi
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isAuth, setIsAuth] = useState(false)
   const [user, setUser] = useState<userType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
 
   useEffect(() => {
-    // Simulating checking for user on initial render (e.g., via cookies or localStorage)
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser) as userType);
     }
@@ -33,37 +30,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = (token: string, userData: userType) => {
-    // Simpan token & user ke localStorage
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(userData));
-
-    // Simpan user ke state
     setUser(userData);
-
-    // Redirect ke dashboard
+    setIsAuth(true)
     router.push("/dashboard");
   };
 
   const logout = () => {
-    // Clear the stored token and user data
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
-    router.push('/login');
+    setIsAuth(false)
+    router.push("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, login, logout, isAuth }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook for consuming the AuthContext
+// Hook untuk menggunakan AuthContext
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
