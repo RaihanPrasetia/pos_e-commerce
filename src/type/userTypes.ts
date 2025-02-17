@@ -6,4 +6,6 @@ export type userType = {
   createdDt: string;
   updateDt: string | null;
   role: string;
+  phoneNumber: string | null;
+  address: string | null;
 };

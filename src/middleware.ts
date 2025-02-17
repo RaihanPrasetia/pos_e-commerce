@@ -38,5 +38,14 @@ export function middleware(req: NextRequest) {
 
 // Terapkan middleware hanya untuk halaman yang perlu autentikasi
 export const config = {
-  matcher: ["/dashboard/:path*", "/profile/:path*", "/api/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/profile/:path*",
+    "/settings/:path*",
+    "/customers/:path*",
+    "/products/:path*",
+    "/transaction/:path*",
+    "/order/:path*",
+    "/api/:path*",
+  ],
 };

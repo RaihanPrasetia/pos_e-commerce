@@ -10,8 +10,13 @@ import {
     ListBulletIcon,
     TagIcon,
     ChevronDownIcon,
+    BuildingStorefrontIcon,
+    PresentationChartLineIcon,
+    CreditCardIcon,
+    CurrencyDollarIcon,
 } from "@heroicons/react/16/solid";
 import Image from "next/image";
+import { BiCartAdd } from "react-icons/bi";
 
 const menuItems = [
     { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
@@ -25,9 +30,17 @@ const menuItems = [
             { name: "Category", href: "/products/category", icon: TagIcon },
         ],
     },
-    { name: "Pesanan", href: "/orders", icon: ClipboardDocumentListIcon },
-    { name: "Pelanggan", href: "/customers", icon: UserIcon },
-    { name: "Pengaturan", href: "/settings", icon: CogIcon },
+    { name: "Transaction", href: "/transaction", icon: BiCartAdd },
+    { name: "Order", href: "/order", icon: ClipboardDocumentListIcon },
+    { name: "Customer", href: "/customers", icon: UserIcon },
+    {
+        name: "Setting", href: "/settings", icon: CogIcon, subMenu: [
+            { name: "Store", href: "/settings/store", icon: BuildingStorefrontIcon },
+            { name: "Promotion", href: "/settings/promotion", icon: PresentationChartLineIcon },
+            { name: "Payment", href: "/settings/payment", icon: CreditCardIcon },
+            { name: "Tax", href: "/settings/tax", icon: CurrencyDollarIcon },
+        ],
+    },
 ];
 
 export type SidebarProps = {

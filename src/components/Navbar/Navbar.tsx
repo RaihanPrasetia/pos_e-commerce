@@ -6,7 +6,6 @@ import {
     BellIcon,
     Bars3CenterLeftIcon,
     ShoppingCartIcon,
-    CogIcon,
     ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/20/solid";
 import { useAuth } from "@/contexts/AuthContext"; // Import useAuth hook
@@ -233,16 +232,6 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                                         height={100}
                                     />
                                     <span>My Profile</span>
-                                </li>
-                                <hr className="flex bg-slate-600 my-2" />
-
-                                {/* Settings */}
-                                <li
-                                    onClick={() => router.push('/settings')}
-                                    className="flex items-center rounded-md p-3 hover:bg-gray-100 cursor-pointer"
-                                >
-                                    <CogIcon className="h-5 w-5 mr-2 text-gray-500" />
-                                    <span>Settings</span>
                                 </li>
 
                                 <hr className="flex bg-slate-600 my-2" />

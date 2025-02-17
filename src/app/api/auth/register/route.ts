@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 import { userType } from "@/type/userTypes";
 import { initialUser } from "@/libs/fake-db/userDb";
+import { saveUserToFile } from "@/libs/utils/fileWriteHelper";
 
 // Simpan user secara sementara (seharusnya di database)
 
@@ -36,13 +37,16 @@ export async function POST(req: Request) {
       email,
       password: hashedPassword, // Simpan password yang sudah di-hash
       name,
-      role: "admin",
+      role: "owner",
       createdDt: new Date().toISOString(),
       updateDt: null,
+      phoneNumber: null,
+      address: null,
     };
 
     // Simpan user (sebaiknya di database)
     initialUser.push(newUser);
+    saveUserToFile(initialUser);
 
     return NextResponse.json(
       { message: "User registered successfully", user: newUser },

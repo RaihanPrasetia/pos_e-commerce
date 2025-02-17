@@ -6,12 +6,12 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function Home() {
 	const router = useRouter();
-	const { user, isLoading } = useAuth();
+	const { user, isLoading, isAuth } = useAuth();
 
 	useEffect(() => {
 		if (isLoading) return; // Tunggu hingga loading selesai
 
-		if (user) {
+		if (user && isAuth) {
 			router.replace("/dashboard"); // Jika login, arahkan ke dashboard
 		} else {
 			router.replace("/login"); // Jika tidak login, arahkan ke login
