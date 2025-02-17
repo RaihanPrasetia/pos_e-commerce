@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const pathname = usePathname();
 
     // **Halaman yang tidak memerlukan sidebar & navbar**
-    const hiddenLayoutPages = ["/dashboard", "/products", "/customers", "/transaction", "/order", "/settings", "/profile"];
+    const hiddenLayoutPages = ["/dashboard", "/products", "/customers", "/transaction", "/order", "/settings", "/store", "/profile"];
 
     if (!hiddenLayoutPages.some((route) => pathname.startsWith(route))) {
         return (

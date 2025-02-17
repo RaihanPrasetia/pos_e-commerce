@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import React from 'react'
 
 interface OverviewCardProps {
@@ -10,16 +10,16 @@ interface OverviewCardProps {
 
 export const OverviewCard = ({ title, icons, title2, subTitle, }: OverviewCardProps) => {
     return (
-        <Card className='shadow-mui-customShadow rounded-lg'>
-            <CardContent className='space-y-4'>
+        <div className='shadow-mui-customShadow rounded-lg p-4 bg-white'>
+            <div className='space-y-4'>
                 {icons}
                 <Typography variant='h6' className='font-bold'>{title}</Typography>
                 <div>
                     {title2}
                     <Typography className='font-medium text-lg'>{subTitle}</Typography>
                 </div>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     )
 }
 
