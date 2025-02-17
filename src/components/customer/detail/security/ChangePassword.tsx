@@ -29,13 +29,12 @@ const ChangePassword = () => {
                 <Typography variant='h6' className='font-bold'>Change Password</Typography>
                 {information && (
                     <div className='w-full p-4 rounded-md bg-purple-100 relative'>
-                        <IconButton
-                            aria-label="close"
+                        <button
                             onClick={handleCloseInformation}
                             className='absolute top-2 right-2'
                         >
                             <XMarkIcon className='w-5 h-5 text-gray-700' />
-                        </IconButton>
+                        </button>
                         <Typography variant='body1' fontWeight="bold">Ensure that these requirements are met</Typography>
                         <Typography variant='body2'>Minimum 8 characters long, uppercase & symbol</Typography>
                     </div>
