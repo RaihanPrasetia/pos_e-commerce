@@ -1,3 +1,4 @@
+"use client"
 import DailyActivity from '@/components/dashboard/DailyActivity'
 import InfoCard from '@/components/dashboard/InfoCard'
 import MarketingReport from '@/components/dashboard/MarketingReport'
@@ -5,32 +6,53 @@ import Payment from '@/components/dashboard/Payment'
 import ProductSale from '@/components/dashboard/ProductSale'
 import SalesProfit from '@/components/dashboard/SalesProfit'
 import WellcomeCard from '@/components/dashboard/WellcomeCard'
+import { Grid } from '@mui/material'
 import React from 'react'
 
 export default function page() {
     return (
-        <div className='grid grid-cols-12 gap-30'>
+        <Grid container spacing={4}>
             {/* Wellcome Card */}
-            <WellcomeCard />
+            <Grid item xs={12} sm={6}>
+                <WellcomeCard />
+            </Grid>
 
             {/* Info Card */}
-            <InfoCard />
+            <Grid item xs={12} sm={6}>
+                <InfoCard />
+            </Grid>
+
 
             {/* Sales Profit */}
-            <SalesProfit />
+            <Grid item xs={12} sm={8}>
+                <SalesProfit />
+            </Grid>
+
 
             {/* Product Sale */}
-            <ProductSale />
+            <Grid item xs={12} sm={4}>
+                <ProductSale />
+            </Grid>
+
 
             {/* Marketing Report */}
-            <MarketingReport />
+            <Grid item xs={12} sm={6}>
+                <MarketingReport />
+            </Grid>
 
             {/* Payment Report */}
-            <Payment />
+            <Grid item xs={12} sm={3}>
+
+                <Payment />
+            </Grid>
+
 
             {/* Daily Activity */}
+            <Grid item xs={12} sm={3}>
 
-            <DailyActivity />
-        </div>
+                <DailyActivity />
+            </Grid>
+
+        </Grid>
     )
 }

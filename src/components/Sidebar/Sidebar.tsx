@@ -11,6 +11,7 @@ import {
     TagIcon,
     ChevronDownIcon,
     BuildingStorefrontIcon,
+    XMarkIcon,
 } from "@heroicons/react/16/solid";
 import Image from "next/image";
 import { BiCartAdd } from "react-icons/bi";
@@ -31,21 +32,14 @@ const menuItems = [
     { name: "Order", href: "/order", icon: ClipboardDocumentListIcon },
     { name: "Customer", href: "/customers", icon: UserIcon },
     { name: "Store", href: "/store", icon: BuildingStorefrontIcon },
-    // {
-    //     name: "Setting", href: "/settings", icon: CogIcon, subMenu: [
-    //         { name: "Store", href: "/settings/store", icon: BuildingStorefrontIcon },
-    //         { name: "Promotion", href: "/settings/promotion", icon: PresentationChartLineIcon },
-    //         { name: "Payment", href: "/settings/payment", icon: CreditCardIcon },
-    //         { name: "Tax", href: "/settings/tax", icon: CurrencyDollarIcon },
-    //     ],
-    // },
 ];
 
 export type SidebarProps = {
-    isOpen: boolean
-}
+    isOpen: boolean;
+    toggleSidebar: () => void; // Add toggleSidebar prop
+};
 
-export default function Sidebar({ isOpen }: SidebarProps) {
+export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     const router = useRouter();
     const pathname = usePathname();
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -53,9 +47,19 @@ export default function Sidebar({ isOpen }: SidebarProps) {
     const toggleDropdown = (name: string) => {
         setActiveDropdown(activeDropdown === name ? null : name);
     };
+    const handleToggleSidebar = () => {
+        toggleSidebar();
+    };
 
     return (
-        <div className="bg-white shadow-mui-customShadow text-gray-700 border-r rounded-r-xl h-full flex flex-col transition-all duration-300 ease-in-out">
+        <div className="bg-white relative lg:block sm:hidden shadow-mui-customShadow text-gray-700 border-r rounded-r-xl h-full flex flex-col transition-all duration-300 ease-in-out">
+            {/* Close button for mobile */}
+            <div className="lg:hidden flex justify-end p-2 absolute top-2 right-2">
+                <button onClick={handleToggleSidebar} className="text-gray-700">
+                    <XMarkIcon className="w-6 h-6" />
+                </button>
+            </div>
+
             <div className="py-4 text-base font-bold tracking-wide text-center flex items-center justify-center space-x-4">
                 {isOpen ? (
                     <>

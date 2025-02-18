@@ -8,6 +8,7 @@ import StoreImage from '@/components/store/StoreImage'
 import StoreInformation from '@/components/store/StoreInformation'
 import { ContentType } from '@/app/store/page'
 import StorePromotion from '@/components/store/StorePromotion'
+import StoreTax from '@/components/store/StoreTax'
 
 
 const StoreLayout = ({ content }: ContentType) => {
@@ -50,6 +51,10 @@ const StoreLayout = ({ content }: ContentType) => {
 
             {content === "promotion" && (
                 <StorePromotion />
+            )}
+
+            {content === "tax" && (
+                <StoreTax />
             )}
         </Grid>
     )

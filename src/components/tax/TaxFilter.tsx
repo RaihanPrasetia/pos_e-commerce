@@ -1,14 +1,14 @@
 import React from 'react'
 import SelectInput from '../form/SelectInput'
 
-interface PromotionFilterProps {
+interface TaxFilterProps {
     pagination: number
     setPagination: (value: number) => void
     searchTerm: string
     handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export const PromotionFilter = ({ pagination, setPagination, searchTerm, handleSearchChange }: PromotionFilterProps) => {
+export const TaxFilter = ({ pagination, setPagination, searchTerm, handleSearchChange }: TaxFilterProps) => {
     return (
         <div className="card-head p-4 flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -26,7 +26,7 @@ export const PromotionFilter = ({ pagination, setPagination, searchTerm, handleS
             </div>
             <input
                 type="text"
-                placeholder="Search Promotion..."
+                placeholder="Search Tax..."
                 value={searchTerm}
                 onChange={handleSearchChange}
                 className="px-4 py-3 rounded-md border border-gray-300 text-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-500"
@@ -35,4 +35,4 @@ export const PromotionFilter = ({ pagination, setPagination, searchTerm, handleS
     )
 }
 
-export default PromotionFilter
+export default TaxFilter

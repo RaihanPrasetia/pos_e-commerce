@@ -15,6 +15,7 @@ import { authLogout } from "@/libs/service/authService";
 
 type NavbarProps = {
     toggleSidebar: () => void;
+    isSidebar: boolean;
 };
 
 const breadcrumbMap: { [key: string]: string } = {
@@ -25,7 +26,7 @@ const breadcrumbMap: { [key: string]: string } = {
     category: "List Category",
 };
 
-export default function Navbar({ toggleSidebar }: NavbarProps) {
+export default function Navbar({ toggleSidebar, isSidebar }: NavbarProps) {
     const { logout } = useAuth(); // Get logout method from AuthContext
     const router = useRouter();
     const pathname = usePathname();
@@ -52,7 +53,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
 
     // Function to handle logout
     const handleLogout = async () => {
-        authLogout()
+        authLogout();
         logout();
     };
 
@@ -105,18 +106,18 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
     }, []);
 
     return (
-        <nav className={`flex items-center justify-between px-4 py-6 transition-all duration-300 ${isScrolled ? "fixed z-50 right-0 mx-14 bg-white shadow-md rounded-md mt-2" : "bg-transparent text-white"}`}>
+        <nav className={`flex items-center justify-between lg:px-4 lg:py-6 p-4 transition-all duration-300 ${isScrolled ? `fixed z-50 bg-white shadow-md rounded-md` : "bg-transparent text-white"} ${isSidebar ? `lg:left-64 ml-4 right-4 left-4` : "lg:right-4 lg:left-20 left-4 right-4"}`}>
             {/* Konten Navbar (toggleSidebar, breadcrumb) */}
             <div className="flex items-center space-x-6">
                 {/* Tombol Toggle Sidebar */}
                 <button
                     onClick={handleToggleSidebar}
-                    className={`p-2 transition rounded-lg ${isSidebarActive
-                        ? " bg-gradient-to-br from-pink-500 to-purple-700 border-2 border-gray-100 shadow-mui-customShadow text-white"
+                    className={`p-2 transition rounded-lg ${isSidebar
+                        ? "bg-gradient-to-br from-pink-500 to-purple-700 border-2 border-gray-100 shadow-mui-customShadow text-white"
                         : "text-slate-600 hover:bg-white hover:shadow-mui-customShadow hover:text-gray-900"
                         }`}
                 >
-                    {isSidebarActive ? (
+                    {isSidebar ? (
                         <Bars3CenterLeftIcon className="h-6 w-6 rotate-180" />
                     ) : (
                         <Bars3Icon className="h-6 w-6" />
@@ -147,18 +148,9 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
             </div>
 
             {/* Konten Navbar (Search, Notifikasi, Logout Button) */}
-            <div className="flex items-center space-x-4 px-6 relative">
-                {/* Search Bar */}
+            <div className="flex items-center space-x-4 relative">
                 <div className="relative">
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        className="w-64 px-4 py-2 rounded-md shadow-mui-customShadow border border-gray-200 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-500"
-                    />
-                </div>
-
-                <div className="relative">
-                    <button className="p-2.5 transition rounded-full text-slate-600  hover:bg-white hover:shadow-lg hover:text-gray-900">
+                    <button className="p-2.5 transition rounded-full text-slate-600 hover:bg-white hover:shadow-lg hover:text-gray-900">
                         <ShoppingCartIcon className="h-5 w-5" />
                         <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5">
                             5
@@ -170,9 +162,9 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                 <div ref={notificationRef} className="relative">
                     <button
                         onClick={handleToggleNotification}
-                        className={`relative p-2 transition rounded-full  ${isNotificationOpen
+                        className={`relative p-2 transition rounded-full ${isNotificationOpen
                             ? "bg-gradient-to-br from-pink-500 to-purple-700 text-white shadow-lg"
-                            : "text-slate-600  hover:bg-white hover:shadow-lg hover:text-gray-900"
+                            : "text-slate-600 hover:bg-white hover:shadow-lg hover:text-gray-900"
                             }`}
                     >
                         <BellIcon className="h-6 w-6" />
@@ -240,7 +232,6 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                                 <li
                                     onClick={handleLogout}
                                     className="flex items-center bg-gradient-to-r from-rose-500 via-rose-500 to-red-600 text-white rounded-md p-3 hover:brightness-110 cursor-pointer"
-
                                 >
                                     <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-2 text-slate-200" />
                                     <span>Logout</span>

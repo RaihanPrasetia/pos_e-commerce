@@ -1,35 +1,35 @@
-import { PromotionType } from '@/type/promotionTypes'
+import { TaxType } from '@/type/taxTypes'
 import { ChevronDownIcon, ChevronUpIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/16/solid'
 import { Avatar, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
-interface PromotionTableListProps {
-    promotions: PromotionType[]
-    selectedPromotions: string[]
-    handleSelectAllPromotions: (e: React.ChangeEvent<HTMLInputElement>) => void
-    handleSelectPromotions: (id: string) => void
+interface TaxTableListProps {
+    taxs: TaxType[]
+    selectedTaxs: string[]
+    handleSelectAllTaxs: (e: React.ChangeEvent<HTMLInputElement>) => void
+    handleSelectTaxs: (id: string) => void
     handleSort: (key: string) => void
     sortedBy: string
     sortOrder: string
-    sortedPromotions: PromotionType[]
+    sortedTaxs: TaxType[]
     currentPage: number
     pagination: number
-    handleEditPromotion: (promotion: PromotionType) => void
-    handleDeletePromotion: (id: string, name: string) => void
+    handleEditTax: (tax: TaxType) => void
+    handleDeleteTax: (id: string, name: string) => void
 }
 
-function PromotionTableList({ promotions, selectedPromotions, handleSelectAllPromotions, handleSelectPromotions, handleSort, sortedBy, sortOrder, sortedPromotions, currentPage, pagination, handleEditPromotion, handleDeletePromotion }: PromotionTableListProps) {
+function TaxTableList({ taxs, selectedTaxs, handleSelectAllTaxs, handleSelectTaxs, handleSort, sortedBy, sortOrder, sortedTaxs, currentPage, pagination, handleEditTax, handleDeleteTax }: TaxTableListProps) {
     const router = useRouter();
 
-    const handleNavigateToPromotion = (id: string) => {
-        router.push(`/promotions/detail?promotionId=${id}`);
+    const handleNavigateToTax = (id: string) => {
+        router.push(`/taxs/detail?taxId=${id}`);
     };
 
     return (
         <div className="card-body px-4 flex-grow">
-            {promotions.length === 0 ? (
-                <p className="text-gray-500">No promotions added yet.</p>
+            {taxs.length === 0 ? (
+                <p className="text-gray-500">No taxs added yet.</p>
             ) : (
                 <table className="min-w-full bg-white rounded-md">
                     <thead>
@@ -38,13 +38,13 @@ function PromotionTableList({ promotions, selectedPromotions, handleSelectAllPro
                                 <input
                                     type="checkbox"
                                     className="h-4 w-4"
-                                    checked={selectedPromotions.length === promotions.length && promotions.length > 0}
-                                    onChange={handleSelectAllPromotions}
+                                    checked={selectedTaxs.length === taxs.length && taxs.length > 0}
+                                    onChange={handleSelectAllTaxs}
                                 />
                             </th>
                             <th className="py-2 px-4 text-left font-semibold text-sm text-gray-400">
                                 <div className="flex justify-between items-center">
-                                    <span>Promotion Name</span>
+                                    <span>Tax Name</span>
                                     <button
                                         onClick={() => handleSort('name')}
                                         className="ml-2"
@@ -92,16 +92,16 @@ function PromotionTableList({ promotions, selectedPromotions, handleSelectAllPro
                     </thead>
 
                     <tbody>
-                        {sortedPromotions
+                        {sortedTaxs
                             .slice((currentPage - 1) * pagination, currentPage * pagination)
-                            .map((promotion) => (
-                                <tr key={promotion.id} className="border-b">
+                            .map((tax) => (
+                                <tr key={tax.id} className="border-b">
                                     <td className="py-2 px-4 text-sm">
                                         <input
                                             type="checkbox"
                                             className="h-4 w-4"
-                                            checked={selectedPromotions.includes(String(promotion.id))}
-                                            onChange={() => handleSelectPromotions(String(promotion.id))}
+                                            checked={selectedTaxs.includes(String(tax.id))}
+                                            onChange={() => handleSelectTaxs(String(tax.id))}
                                         />
                                     </td>
                                     <td className="py-2 px-4">
@@ -109,32 +109,32 @@ function PromotionTableList({ promotions, selectedPromotions, handleSelectAllPro
                                             <Typography
                                                 variant='body2'
                                                 className="text-sm font-semibold text-gray-500 cursor-pointer text-utama-hover"
-                                                onClick={() => handleNavigateToPromotion(promotion.id)}
+                                                onClick={() => handleNavigateToTax(tax.id)}
                                             >
-                                                {promotion.name}
+                                                {tax.name}
                                             </Typography>
                                         </div>
                                     </td>
                                     <td className="py-2 px-4">
-                                        <span className="text-sm text-gray-500">{promotion.value}</span>
+                                        <span className="text-sm text-gray-500">{tax.value}</span>
                                     </td>
                                     <td className="py-2 px-4 text-sm w-52 text-center">
                                         <div className=' flex items-center space-x-2'>
                                             <span
-                                                className={`status-badge ${promotion.isActive
+                                                className={`status-badge ${tax.isActive
                                                     ? 'status-active'
                                                     : 'status-inactive'
                                                     }`}
                                             >
                                             </span>
 
-                                            <span className='text-slate-400 font-medium'>{promotion.isActive ? 'Active' : 'Inactive'}</span>
+                                            <span className='text-slate-400 font-medium'>{tax.isActive ? 'Active' : 'Inactive'}</span>
                                         </div>
                                     </td>
                                     <td className="py-2 px-4 text-sm space-x-3 flex">
                                         <button
                                             className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-br from-pink-500 to-purple-700 rounded-md shadow-md transition hover:brightness-110"
-                                            onClick={() => handleEditPromotion(promotion)}
+                                            onClick={() => handleEditTax(tax)}
                                         >
                                             <PencilSquareIcon className="h-4 w-4" />
                                             <span>Edit</span>
@@ -142,7 +142,7 @@ function PromotionTableList({ promotions, selectedPromotions, handleSelectAllPro
 
                                         <button
                                             className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-md transition hover:brightness-110"
-                                            onClick={() => handleDeletePromotion(promotion.id, promotion.name)}
+                                            onClick={() => handleDeleteTax(tax.id, tax.name)}
                                         >
                                             <TrashIcon className="h-4 w-4" />
                                             <span>Delete</span>
@@ -157,4 +157,4 @@ function PromotionTableList({ promotions, selectedPromotions, handleSelectAllPro
     )
 }
 
-export default PromotionTableList
+export default TaxTableList

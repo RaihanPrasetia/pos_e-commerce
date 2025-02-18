@@ -1,54 +1,54 @@
-import { PromotionType } from '@/type/promotionTypes'
+import { TaxType } from '@/type/taxTypes'
 import { Card, CardContent, Grid, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import PromotionFilter from '../promotion/PromotionFilter';
+import TaxFilter from '../tax/TaxFilter';
 import { PlusIcon, TrashIcon } from '@heroicons/react/16/solid';
-import PromotionTableList from '../promotion/PromotionTableList';
+import TaxTableList from '../tax/TaxTableList';
 import Pagination from '../pagination/Pagination';
 import Swal from 'sweetalert2';
 import ButttonIcon from '../Button/ButttonIcon';
-import { getPromotions } from '@/libs/service/promotionService';
-import AddPromotionDrawer from '../promotion/AddPromotionDrawer';
-import EditPromotionDrawer from '../promotion/EditPromotionDrawer';
-import PromotionInfo from '../promotion/PromotionInfo';
+import { getTaxs } from '@/libs/service/taxService';
+import AddTaxDrawer from '../tax/AddTaxDrawer';
+import EditTaxDrawer from '../tax/EditTaxDrawer';
+import TaxInfo from '../tax/TaxInfo';
 
-function StorePromotion() {
-    const [promotions, setPromotions] = useState<PromotionType[]>([]);
+function StoreTax() {
+    const [taxs, setTaxs] = useState<TaxType[]>([]);
     const [pagination, setPagination] = useState<number>(5);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [sortedBy, setSortedBy] = useState<string>('name');
     const [sortOrder, setSortOrder] = useState<string>('asc');
-    const [selectedPromotions, setSelectedPromotions] = useState<string[]>([]);
+    const [selectedTaxs, setSelectedTaxs] = useState<string[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentPromotion, setCurrentPromotion] = useState<PromotionType | undefined>(undefined);
+    const [currentTax, setCurrentTax] = useState<TaxType | undefined>(undefined);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
 
     useEffect(() => {
-        const fetchPromotions = async () => {
+        const fetchTaxs = async () => {
             try {
-                const promotion = await getPromotions()
-                setPromotions(promotion)
+                const tax = await getTaxs()
+                setTaxs(tax)
             } catch (error) {
-                console.error("Error fetch promotions :", error)
+                console.error("Error fetch taxs :", error)
             }
         }
-        fetchPromotions()
+        fetchTaxs()
     }, [])
 
-    const handleEditPromotion = (promotion: PromotionType) => {
-        setCurrentPromotion(promotion);
+    const handleEditTax = (tax: TaxType) => {
+        setCurrentTax(tax);
         setIsEditModalOpen(true);
     };
 
-    const handleUpdatePromotion = async (promotion: PromotionType) => {
+    const handleUpdateTax = async (tax: TaxType) => {
         try {
-            setPromotions((prev) =>
-                prev.map((p) =>
-                    p.id === promotion.id
-                        ? promotion
-                        : p
+            setTaxs((prev) =>
+                prev.map((t) =>
+                    t.id === tax.id
+                        ? tax
+                        : t
                 )
             );
         } catch (error) {
@@ -61,12 +61,12 @@ function StorePromotion() {
         setSearchTerm(e.target.value);
     };
 
-    const handleAddPromotion = async (formData: PromotionType) => {
+    const handleAddTax = async (formData: TaxType) => {
         try {
             // Kirim data ke API
 
             // Update state hanya jika API sukses
-            setPromotions((prevPromotion) => [...prevPromotion, formData]);
+            setTaxs((prevTax) => [...prevTax, formData]);
 
             // Notifikasi sukses
             Swal.fire({
@@ -90,7 +90,7 @@ function StorePromotion() {
         }
     };
 
-    const handleDeletePromotion = (id: string, name: string) => {
+    const handleDeleteTax = (id: string, name: string) => {
         Swal.fire({
             title: 'Are you sure?',
             text: `Are you sure you want to delete ${name}?`,
@@ -100,8 +100,8 @@ function StorePromotion() {
             cancelButtonText: 'No, keep it'
         }).then((result) => {
             if (result.isConfirmed) {
-                const updatedCategories = promotions.filter((promotion) => promotion.id !== id);
-                setPromotions(updatedCategories);
+                const updatedCategories = taxs.filter((tax) => tax.id !== id);
+                setTaxs(updatedCategories);
                 Swal.fire({
                     title: 'Deleted!',
                     text: `${name} has been deleted.`,
@@ -112,22 +112,22 @@ function StorePromotion() {
         });
     };
 
-    const handleDeleteSelectedPromotions = () => {
-        if (selectedPromotions.length > 0) {
-            const updatedPromotions = promotions.filter(
-                (promotion) => !selectedPromotions.includes(promotion.id)
+    const handleDeleteSelectedTaxs = () => {
+        if (selectedTaxs.length > 0) {
+            const updatedTaxs = taxs.filter(
+                (tax) => !selectedTaxs.includes(tax.id)
             );
-            setPromotions(updatedPromotions);
-            setSelectedPromotions([]);
-            alert('Selected promotions have been deleted.');
+            setTaxs(updatedTaxs);
+            setSelectedTaxs([]);
+            alert('Selected taxs have been deleted.');
         }
     };
 
-    const handleSelectAllPromotions = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSelectAllTaxs = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.checked) {
-            setSelectedPromotions(promotions.map((promotion) => promotion.id));
+            setSelectedTaxs(taxs.map((tax) => tax.id));
         } else {
-            setSelectedPromotions([]);
+            setSelectedTaxs([]);
         }
     };
 
@@ -138,47 +138,47 @@ function StorePromotion() {
     };
 
 
-    const handleSelectPromotion = (id: string) => {
-        setSelectedPromotions((prev) =>
+    const handleSelectTax = (id: string) => {
+        setSelectedTaxs((prev) =>
             prev.includes(id)
-                ? prev.filter((promotionId) => promotionId !== id)
+                ? prev.filter((taxId) => taxId !== id)
                 : [...prev, id]
         );
     };
-    const sortedPromotions = promotions
-        .filter((promotion) =>
-            promotion.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const sortedTaxs = taxs
+        .filter((tax) =>
+            tax.name.toLowerCase().includes(searchTerm.toLowerCase())
         )
         .sort((a, b) => {
-            if ((a[sortedBy as keyof PromotionType] as string) < (b[sortedBy as keyof PromotionType] as string)) return sortOrder === 'asc' ? -1 : 1;
-            if ((a[sortedBy as keyof PromotionType] as string) > (b[sortedBy as keyof PromotionType] as string)) return sortOrder === 'asc' ? 1 : -1;
+            if ((a[sortedBy as keyof TaxType] as string) < (b[sortedBy as keyof TaxType] as string)) return sortOrder === 'asc' ? -1 : 1;
+            if ((a[sortedBy as keyof TaxType] as string) > (b[sortedBy as keyof TaxType] as string)) return sortOrder === 'asc' ? 1 : -1;
             return 0;
         });
 
-    const totalPages = Math.ceil(sortedPromotions.length / pagination);
+    const totalPages = Math.ceil(sortedTaxs.length / pagination);
     return (
         <Grid item xs={12} sm={8} gap={4} className='space-y-4'>
-            {/* Promotion info */}
-            <PromotionInfo />
+            {/* Tax info */}
+            <TaxInfo />
 
             <Card>
                 <CardContent className='space-y-4 shadow-mui-customShadow'>
                     <div className='flex w-full justify-between items-center'>
-                        <Typography variant='h6' fontWeight="bold">List Promotion</Typography>
+                        <Typography variant='h6' fontWeight="bold">List Tax</Typography>
                         <ButttonIcon
                             onClick={() => setIsModalOpen(true)}
                             icons={<PlusIcon className="h-4 w-4 mr-1" />}
-                            title='Add Promotion' />
+                            title='Add Tax' />
                     </div>
-                    <PromotionFilter pagination={pagination} handleSearchChange={handleSearchChange} searchTerm={searchTerm} setPagination={setPagination} />
+                    <TaxFilter pagination={pagination} handleSearchChange={handleSearchChange} searchTerm={searchTerm} setPagination={setPagination} />
 
-                    {selectedPromotions.length > 0 && (
+                    {selectedTaxs.length > 0 && (
                         <div className="flex justify-between items-center mb-4 px-4">
                             <span className="text-sm font-semibold text-slate-500">
-                                {`${selectedPromotions.length} item(s) selected`}
+                                {`${selectedTaxs.length} item(s) selected`}
                             </span>
                             <button
-                                onClick={handleDeleteSelectedPromotions}
+                                onClick={handleDeleteSelectedTaxs}
                                 className="flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-sm rounded-md shadow-md hover:brightness-110"
                             >
                                 <TrashIcon className="h-5 w-5 mr-2" />
@@ -187,19 +187,19 @@ function StorePromotion() {
                         </div>
                     )}
 
-                    <PromotionTableList
-                        promotions={promotions}
+                    <TaxTableList
+                        taxs={taxs}
                         pagination={pagination}
                         currentPage={currentPage}
-                        handleEditPromotion={handleEditPromotion}
-                        handleSelectAllPromotions={handleSelectAllPromotions}
-                        handleSelectPromotions={handleSelectPromotion}
+                        handleEditTax={handleEditTax}
+                        handleSelectAllTaxs={handleSelectAllTaxs}
+                        handleSelectTaxs={handleSelectTax}
                         sortOrder={sortOrder}
                         handleSort={handleSort}
-                        selectedPromotions={selectedPromotions}
+                        selectedTaxs={selectedTaxs}
                         sortedBy={sortedBy}
-                        sortedPromotions={sortedPromotions}
-                        handleDeletePromotion={handleDeletePromotion}
+                        sortedTaxs={sortedTaxs}
+                        handleDeleteTax={handleDeleteTax}
                     />
 
                     <div className="card-footer px-4 flex justify-end items-center py-2 mt-4 space-x-2">
@@ -212,20 +212,20 @@ function StorePromotion() {
                 </CardContent>
             </Card>
 
-            <AddPromotionDrawer
+            <AddTaxDrawer
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                onSubmit={handleAddPromotion}
+                onSubmit={handleAddTax}
             />
 
-            <EditPromotionDrawer
+            <EditTaxDrawer
                 isOpen={isEditModalOpen}
                 onClose={() => setIsEditModalOpen(false)}
-                onSubmit={handleUpdatePromotion}
-                promotion={currentPromotion || undefined}
+                onSubmit={handleUpdateTax}
+                tax={currentTax || undefined}
             />
         </Grid>
     )
 }
 
-export default StorePromotion
+export default StoreTax

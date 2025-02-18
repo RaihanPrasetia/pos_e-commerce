@@ -77,7 +77,7 @@ export default function ListProduct() {
 
     return (
         <>
-            <div className='flex items-end justify-between mb-6'>
+            <div className='flex flex-col lg:flex-row items-start lg:items-end justify-between mb-6'>
                 <div>
                     <h1 className='text-2xl text-slate-600 font-medium mb-2'>List Product</h1>
                     <span className='text-lg text-slate-500'>Orders placed across your store</span>
@@ -95,7 +95,7 @@ export default function ListProduct() {
             <div className="card shadow-mui-customShadow min-h-[560.8px] border-2-slate-500 rounded-md overflow-hidden px-4 pb-6 bg-white flex flex-col">
 
                 {/* Card Sub-Header: Pagination and Search */}
-                <div className="card-head p-4 flex items-center justify-between">
+                <div className="p-4 flex flex-col space-y-4 lg:flex-row items-center justify-between">
                     {/* Select for Pagination */}
                     <div className="flex items-center space-x-2">
                         <span className="text-slate-500">Show</span>
@@ -117,7 +117,7 @@ export default function ListProduct() {
                         placeholder="Search Products..."
                         value={searchTerm}
                         onChange={handleSearchChange}
-                        className="px-4 py-1 rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-500"
+                        className="px-4 py-2 w-full lg:w-max rounded-md border border-slate-300 text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-500"
                     />
                 </div>
 
@@ -148,101 +148,103 @@ export default function ListProduct() {
                             </button>
                         )}
                     </div>
-                    <table className="min-w-full">
-                        <thead>
-                            <tr>
-                                <th className="py-2 px-4 text-left text-sm font-semibold text-slate-400 w-px">
-                                    {/* Checkbox Select All */}
-                                    <input
-                                        type="checkbox"
-                                        className="h-4 w-4"
-                                        checked={selectedProducts.length === products.length && products.length > 0}
-                                        onChange={(e) => {
-                                            if (e.target.checked) {
-                                                setSelectedProducts(products.map((product) => product.id));
-                                            } else {
-                                                setSelectedProducts([]);
-                                            }
-                                        }}
-                                    />
-                                </th>
-                                {['name', 'category', 'price', 'code', 'isActive'].map((column) => (
-                                    <th key={column} className="py-2 px-4 text-left text-sm font-semibold text-slate-400">
-                                        <div className="flex justify-between items-center">
-                                            <span>{column.charAt(0).toUpperCase() + column.slice(1)}</span>
-                                            <button onClick={() => handleSort(column)} className="ml-2">
-                                                {sortedBy === column && sortOrder === 'asc' ? (
-                                                    <ChevronUpIcon className="h-5 w-5 text-slate-500" />
-                                                ) : (
-                                                    <ChevronDownIcon className="h-5 w-5 text-slate-500" />
-                                                )}
-                                            </button>
-                                        </div>
+                    <div className='overflow-x-auto'>
+                        <table className="w-full">
+                            <thead>
+                                <tr>
+                                    <th className="py-2 px-4 text-left text-sm font-semibold text-slate-400 w-px">
+                                        {/* Checkbox Select All */}
+                                        <input
+                                            type="checkbox"
+                                            className="h-4 w-4"
+                                            checked={selectedProducts.length === products.length && products.length > 0}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setSelectedProducts(products.map((product) => product.id));
+                                                } else {
+                                                    setSelectedProducts([]);
+                                                }
+                                            }}
+                                        />
                                     </th>
-                                ))}
-                                <th className="py-2 px-4 text-left text-sm font-semibold text-slate-400 w-px">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {sortedProducts
-                                .slice((currentPage - 1) * pagination, currentPage * pagination)
-                                .map((product) => (
-                                    <tr key={product.id} className="border-t">
-                                        <td className="py-2 px-4 text-sm text-slate-500 w-px">
-                                            <input
-                                                type="checkbox"
-                                                className="h-4 w-4"
-                                                checked={selectedProducts.includes(product.id)}
-                                                onChange={() => handleSelectProduct(product.id)}
-                                            />
-                                        </td>
-                                        <td className="py-2 px-4">
-                                            <div className="flex space-x-4 items-center">
-                                                <Image src={product.imageUrl} alt={product.name} width={52} height={52} className="w-10 h-10 rounded-full" />
-                                                <span className="text-sm font-semibold text-slate-500">{product.name}</span>
+                                    {['name', 'category', 'price', 'code', 'isActive'].map((column) => (
+                                        <th key={column} className="py-2 px-4 text-left text-sm font-semibold text-slate-400">
+                                            <div className="flex justify-between items-center">
+                                                <span>{column.charAt(0).toUpperCase() + column.slice(1)}</span>
+                                                <button onClick={() => handleSort(column)} className="ml-2">
+                                                    {sortedBy === column && sortOrder === 'asc' ? (
+                                                        <ChevronUpIcon className="h-5 w-5 text-slate-500" />
+                                                    ) : (
+                                                        <ChevronDownIcon className="h-5 w-5 text-slate-500" />
+                                                    )}
+                                                </button>
                                             </div>
-                                        </td>
-                                        <td className="py-2 px-4 text-sm text-slate-500">{product.category.name}</td>
-                                        <td className="py-2 px-4 text-sm text-slate-500">{product.price}</td>
-                                        <td className="py-2 px-4 text-sm text-slate-500">{product.code}</td>
-                                        <td className="py-2 px-4 text-sm w-52 text-center">
-                                            <div className='flex space-x-2 items-center'>
-                                                <span
-                                                    className={`status-badge ${product.isActive
-                                                        ? 'status-active'
-                                                        : 'status-inactive'
-                                                        }`}
+                                        </th>
+                                    ))}
+                                    <th className="py-2 px-4 text-left text-sm font-semibold text-slate-400 w-px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {sortedProducts
+                                    .slice((currentPage - 1) * pagination, currentPage * pagination)
+                                    .map((product) => (
+                                        <tr key={product.id} className="border-t">
+                                            <td className="py-2 px-4 text-sm text-slate-500 w-px">
+                                                <input
+                                                    type="checkbox"
+                                                    className="h-4 w-4"
+                                                    checked={selectedProducts.includes(product.id)}
+                                                    onChange={() => handleSelectProduct(product.id)}
+                                                />
+                                            </td>
+                                            <td className="py-2 px-4">
+                                                <div className="flex space-x-4 items-center">
+                                                    <Image src={product.imageUrl} alt={product.name} width={52} height={52} className="w-10 h-10 rounded-full" />
+                                                    <span className="text-sm font-semibold text-slate-500">{product.name}</span>
+                                                </div>
+                                            </td>
+                                            <td className="py-2 px-4 text-sm text-slate-500">{product.category.name}</td>
+                                            <td className="py-2 px-4 text-sm text-slate-500">{product.price}</td>
+                                            <td className="py-2 px-4 text-sm text-slate-500">{product.code}</td>
+                                            <td className="py-2 px-4 text-sm w-52 text-center">
+                                                <div className='flex space-x-2 items-center'>
+                                                    <span
+                                                        className={`status-badge ${product.isActive
+                                                            ? 'status-active'
+                                                            : 'status-inactive'
+                                                            }`}
+                                                    >
+                                                    </span>
+
+                                                    <span className='text-slate-400 font-medium'>
+                                                        {product.isActive ? 'Active' : 'Inactive'}
+                                                    </span>
+                                                </div>
+                                            </td>
+
+                                            <td className="py-2 px-4 text-sm space-x-3 flex">
+                                                <button
+                                                    className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-md shadow-md transition hover:brightness-110"
+                                                    onClick={() => handleToEdit(product.id)}
                                                 >
-                                                </span>
+                                                    <PencilSquareIcon className="h-4 w-4" />
+                                                    <span>Edit</span>
+                                                </button>
 
-                                                <span className='text-slate-400 font-medium'>
-                                                    {product.isActive ? 'Active' : 'Inactive'}
-                                                </span>
-                                            </div>
-                                        </td>
-
-                                        <td className="py-2 px-4 text-sm space-x-3 flex">
-                                            <button
-                                                className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-md shadow-md transition hover:brightness-110"
-                                                onClick={() => handleToEdit(product.id)}
-                                            >
-                                                <PencilSquareIcon className="h-4 w-4" />
-                                                <span>Edit</span>
-                                            </button>
-
-                                            {/* Tombol Delete */}
-                                            <button
-                                                className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-md transition hover:brightness-110"
-                                                onClick={() => console.log('Delete clicked')}
-                                            >
-                                                <TrashIcon className="h-4 w-4" />
-                                                <span>Delete</span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                        </tbody>
-                    </table>
+                                                {/* Tombol Delete */}
+                                                <button
+                                                    className="flex items-center px-3 py-2 space-x-1 text-xs font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-md transition hover:brightness-110"
+                                                    onClick={() => console.log('Delete clicked')}
+                                                >
+                                                    <TrashIcon className="h-4 w-4" />
+                                                    <span>Delete</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 {/* Card Footer */}

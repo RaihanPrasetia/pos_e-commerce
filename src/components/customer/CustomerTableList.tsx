@@ -1,7 +1,7 @@
 import { CustomerType } from '@/type/cutomersType'
 import { ChevronDownIcon, ChevronUpIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/16/solid'
 import { Avatar, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import React from 'react'
 
 interface CustomerTableListProps {
@@ -20,11 +20,7 @@ interface CustomerTableListProps {
 }
 
 function CustomerTableList({ customers, selectedCustomers, handleSelectAllCustomers, handleSelectCustomers, handleSort, sortedBy, sortOrder, sortedCustomers, currentPage, pagination, handleEditCustomer, handleDeleteCustomer }: CustomerTableListProps) {
-    const router = useRouter();
 
-    const handleNavigateToCustomer = (id: string) => {
-        router.push(`/customers/detail?customerId=${id}`);
-    };
 
     return (
         <div className="card-body px-4 flex-grow">
@@ -124,8 +120,10 @@ function CustomerTableList({ customers, selectedCustomers, handleSelectAllCustom
                                             <Avatar alt={customer.name} src={customer.imageUrl} className="w-10 h-10 bg-utama rounded-full" />
                                             <Typography
                                                 variant='body2'
-                                                className="text-sm font-semibold text-gray-500 cursor-pointer text-utama-hover"
-                                                onClick={() => handleNavigateToCustomer(customer.id)}
+                                                component={Link}
+                                                fontWeight="semibold"
+                                                className='text-utama-hover'
+                                                href={`/customers/detail?customerId=${customer.id}`}
                                             >
                                                 {customer.name}
                                             </Typography>

@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import "./globals.css";
+import { Grid } from "@mui/material";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -37,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <AuthProvider>
                     {/* Sidebar */}
                     <div
-                        className={`fixed h-full mt-3 transition-all duration-500 ease-in-out ${isSidebarOpen ? "w-64" : "w-16"}`}
+                        className={`h-full lg:block fixed z-50 mt-3 lg:top-0 top-16 transition-all duration-500 ease-in-out ${isSidebarOpen ? "w-64" : "w-0 lg:w-16"}`}
                         onMouseEnter={() => {
                             if (!isSidebarFixed) setSidebarOpen(true);
                         }}
@@ -45,18 +46,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             if (!isSidebarFixed) setSidebarOpen(false);
                         }}
                     >
-                        <Sidebar isOpen={isSidebarOpen} />
+                        <Sidebar isOpen={isSidebarOpen} toggleSidebar={handleSidebarToggle} />
                     </div>
 
-                    <div className={`flex flex-col min-h-screen flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? "ml-64" : "ml-16"}`}>
+                    <div className={`transition-all w-full duration-500 ease-in-out ${isSidebarOpen ? "lg:ml-64" : "lg:ml-16"}`}>
                         {/* Navbar */}
-                        <Navbar toggleSidebar={handleSidebarToggle} />
+                        <Navbar toggleSidebar={handleSidebarToggle} isSidebar={isSidebarOpen} />
 
-                        {/* Main Content */}
-                        <main className="px-16 pb-8 min-h-[100vh]">{children}</main>
+                        <div className="px-4 min-h-screen">{children}</div>
 
                         {/* Footer */}
                         <Footer />
+
                     </div>
                 </AuthProvider>
             </body>

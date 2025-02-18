@@ -4,8 +4,8 @@ import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa'
 
 export default function Footer() {
     return (
-        <footer className="bg-gradient-to-r from-slate-400 via-gray-500 to-slate-500 text-white py-4">
-            <div className="  px-8">
+        <footer className="bg-gradient-to-r mt-6 from-slate-400 via-gray-500 to-slate-500 text-white py-4">
+            <div className="px-8">
                 {/* Main Footer Content */}
                 <div className="flex flex-col md:flex-row items-center justify-between">
                     {/* Logo Section */}
