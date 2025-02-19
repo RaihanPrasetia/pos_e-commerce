@@ -5,7 +5,7 @@ import React from 'react'
 const Verification = () => {
     return (
         <Grid item xs={12}>
-            <div className='p-4 bg-white rounded-lg space-y-4'>
+            <div className='p-6 bg-white rounded-md space-y-4'>
                 <div>
                     <Typography variant='h6' className='font-bold'>Two-step verification</Typography>
                     <Typography variant='body2'>Keep your account secure with authentication step.</Typography>

@@ -61,7 +61,7 @@ const CustumerOrder = () => {
     return (
         <Grid item xs={12} sm={12}>
             <Card>
-                <CardContent className="flex flex-col flex-grow min-h-[450px]">
+                <CardContent className="flex flex-col flex-grow min-h-[450px] p-6">
                     <Typography variant='h6' className='font-bold mb-4'>Orders Placed</Typography>
                     <div className="card-head mb-4 flex items-center justify-between">
                         <div className="flex items-center space-x-2">

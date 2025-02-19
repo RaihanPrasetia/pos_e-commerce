@@ -1,0 +1,40 @@
+import { AddressType } from "@/type/addressTypes";
+
+export const initialAddress: AddressType[] = [
+  {
+    id: "ADRS001",
+    location: "123 Main St, New York, NY 10030",
+    locationType: "home",
+    description: "Blue Wall",
+    phoneNumber: "123-456-7890",
+    country: "New York",
+    createdDt: "10-05-2020",
+    customerId: "D4e5F6",
+    isActive: true,
+    modifedDt: null,
+  },
+  {
+    id: "ADRS002",
+    location: "825 Main St, New York, NY 80201",
+    locationType: "office",
+    description: "Flor A4",
+    phoneNumber: "123-456-7890",
+    country: "New York",
+    createdDt: "10-05-2020",
+    customerId: "D4e5F6",
+    isActive: true,
+    modifedDt: "11-05-2020",
+  },
+  {
+    id: "ADRS003",
+    location: "345 Main St, New York, NY 20015",
+    locationType: "home",
+    description: "Flor A4",
+    phoneNumber: "123-456-7890",
+    country: "New York",
+    createdDt: "10-05-2020",
+    customerId: "D4e5F6",
+    isActive: false,
+    modifedDt: null,
+  },
+];

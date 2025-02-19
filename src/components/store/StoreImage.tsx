@@ -1,5 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import React from 'react'
+import PremiumCard from '../Premium/PremiumCard';
 
 interface StoreImageProps {
     imageUrl: string | null;
@@ -13,6 +14,7 @@ const StoreImage: React.FC<StoreImageProps> = ({ imageUrl, name }) => {
                 <img src={imageUrl || "/assets/img/logos/store-logo.png"} alt={name} className="w-full h-full object-cover" />
                 <Typography variant='h5' fontWeight="bold">{name}</Typography>
             </div>
+            <PremiumCard />
         </Grid>
     )
 }

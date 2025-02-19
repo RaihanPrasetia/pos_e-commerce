@@ -1,6 +1,7 @@
 import { CustomerType } from '@/type/cutomersType'
 import React from 'react'
 import { Card, CardContent, Typography, Avatar, Grid } from '@mui/material'
+import PremiumCard from '@/components/Premium/PremiumCard'
 
 interface CustomerCardInfoProps {
     customer: CustomerType | undefined
@@ -13,7 +14,7 @@ export const CustomerCardInfo = ({ customer }: CustomerCardInfoProps) => {
 
     return (
         <Grid item xs={12} md={4}>
-            <Card className="shadow-mui-customShadow rounded-lg overflow-hidden w-full">
+            <Card className="shadow-mui-customShadow rounded-md overflow-hidden w-full">
                 <CardContent className="p-6">
                     <div className="flex items-center space-x-4 mb-4">
                         <Avatar alt={customer.name} src={customer.imageUrl} className="w-16 h-16" />
@@ -59,6 +60,8 @@ export const CustomerCardInfo = ({ customer }: CustomerCardInfoProps) => {
                     </div>
                 </CardContent>
             </Card>
+
+            <PremiumCard />
         </Grid>
     )
 }

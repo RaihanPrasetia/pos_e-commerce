@@ -86,7 +86,7 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             </div>
             <hr className="bg-gray-300 mb-4" />
 
-            <nav className={`flex-grow overflow-y-auto ${isOpen ? "px-3" : "px-0"} transition-all duration-300`}>
+            <nav className={`flex-grow overflow-hidden ${isOpen ? "px-3" : "px-0"} transition-all duration-300`}>
                 <ul className="space-y-3">
                     {menuItems.map((item) => {
                         const hasSubMenu = item.subMenu && item.subMenu.length > 0;

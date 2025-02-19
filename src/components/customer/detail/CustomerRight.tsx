@@ -3,6 +3,8 @@ import { Grid, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import OverviewLayout from './overview/OverviewLayout';
 import SecurityLayout from './security/SecurityLayout';
+import AddressLayout from './addressAndBilling/AdresssLayout';
+import NotifLayout from './notifictaion/NotifLayout';
 
 export const CustomerRight = () => {
     const [content, setContent] = useState('overview');
@@ -58,10 +60,10 @@ export const CustomerRight = () => {
                         <SecurityLayout />
                     )}
                     {content === 'address' && (
-                        <Typography variant="h6">Address & Billing Content</Typography>
+                        <AddressLayout />
                     )}
                     {content === 'notification' && (
-                        <Typography variant="h6">Notification Content</Typography>
+                        <NotifLayout />
                     )}
                 </Grid>
             </Grid>

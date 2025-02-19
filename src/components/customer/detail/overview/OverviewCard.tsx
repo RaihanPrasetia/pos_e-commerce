@@ -10,7 +10,7 @@ interface OverviewCardProps {
 
 export const OverviewCard = ({ title, icons, title2, subTitle, }: OverviewCardProps) => {
     return (
-        <div className='shadow-mui-customShadow rounded-lg p-4 bg-white'>
+        <div className='shadow-mui-customShadow rounded-md p-6 bg-white'>
             <div className='space-y-4'>
                 {icons}
                 <Typography variant='h6' className='font-bold'>{title}</Typography>

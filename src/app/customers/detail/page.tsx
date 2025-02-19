@@ -1,4 +1,4 @@
-import CustomerDetailClient from "@/app/views/CustomerDetailClient";
+import CustomerDetailClient from "@/views/customer/CustomerDetailClient";
 import { Suspense } from "react";
 
 const CustomerDetail = () => {

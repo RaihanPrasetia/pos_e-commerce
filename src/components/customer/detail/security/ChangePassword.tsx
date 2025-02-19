@@ -25,7 +25,7 @@ const ChangePassword = () => {
 
     return (
         <Grid item xs={12}>
-            <div className='p-4 bg-white rounded-lg space-y-4'>
+            <div className='p-6 bg-white rounded-md space-y-4'>
                 <Typography variant='h6' className='font-bold'>Change Password</Typography>
                 {information && (
                     <div className='w-full p-4 rounded-md bg-purple-100 relative'>
@@ -35,8 +35,8 @@ const ChangePassword = () => {
                         >
                             <XMarkIcon className='w-5 h-5 text-gray-700' />
                         </button>
-                        <Typography variant='body1' fontWeight="bold">Ensure that these requirements are met</Typography>
-                        <Typography variant='body2'>Minimum 8 characters long, uppercase & symbol</Typography>
+                        <Typography variant='body1' fontWeight="bold" className='text-slate-600'>Ensure that these requirements are met</Typography>
+                        <Typography variant='body2' className='text-slate-600'>Minimum 8 characters long, uppercase & symbol</Typography>
                     </div>
                 )}
                 <div className='flex justify-between items-center space-x-4'>
