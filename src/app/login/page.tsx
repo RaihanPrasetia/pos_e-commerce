@@ -89,7 +89,7 @@ export default function Login() {
                         </div>
                         <button
                             type="submit"
-                            className="w-full py-4 font-bold text-white bg-violet-500 hover:bg-violet-600 rounded-md text-sm"
+                            className="w-full py-4 font-bold text-white bg-utama hover:brightness-105 rounded-md text-sm"
                             disabled={isLoading}
                         >
                             {isLoading ? "Signing in..." : "Sign in"}
@@ -105,8 +105,8 @@ export default function Login() {
                 </div>
             </div>
             <div className="hidden lg:flex w-full h-[100vh] p-4">
-                <div className="relative w-full h-full rounded-xl overflow-hidden bg-cover bg-center bg-[url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-ill.jpg')]">
-                    <div className="absolute inset-0 bg-gradient-to-tl from-blue-500 to-violet-500 opacity-70"></div>
+                <div className="relative w-full h-full rounded-xl overflow-hidden bg-cover bg-center bg-[url('/assets/img/avatar/login2.png')]">
+                    <div className="absolute inset-0 bg-utama opacity-70"></div>
                     <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
                         <h4 className="text-lg font-bold text-white mb-4">&quot;Attention is the new currency&quot;</h4>
                         <p className="text-sm text-white">

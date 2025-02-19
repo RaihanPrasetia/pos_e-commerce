@@ -13,10 +13,10 @@ export const initialBilling: BillingType[] = [
     owner: initialCustomers
       .filter((c) => c.id === "D4e5F6")
       .map((c) => ({
-        ownerName: c.name,
-        ownerEmail: c.email,
-        ownerCountry: c.country,
-        ownerPhone: c.phone,
+        ownerName: c.name || "",
+        ownerEmail: c.email || "",
+        ownerCountry: c.country || "",
+        ownerPhone: c.phone || "",
       }))[0],
   },
   {
@@ -30,10 +30,10 @@ export const initialBilling: BillingType[] = [
     owner: initialCustomers
       .filter((c) => c.id === "D4e5F6")
       .map((c) => ({
-        ownerName: c.name,
-        ownerEmail: c.email,
-        ownerCountry: c.country,
-        ownerPhone: c.phone,
+        ownerName: c.name || "",
+        ownerEmail: c.email || "",
+        ownerCountry: c.country || "",
+        ownerPhone: c.phone || "",
       }))[0],
   },
   {
@@ -47,10 +47,10 @@ export const initialBilling: BillingType[] = [
     owner: initialCustomers
       .filter((c) => c.id === "D4e5F6")
       .map((c) => ({
-        ownerName: c.name,
-        ownerEmail: c.email,
-        ownerCountry: c.country,
-        ownerPhone: c.phone,
+        ownerName: c.name || "",
+        ownerEmail: c.email || "",
+        ownerCountry: c.country || "",
+        ownerPhone: c.phone || "",
       }))[0],
   },
   {
@@ -64,10 +64,10 @@ export const initialBilling: BillingType[] = [
     owner: initialCustomers
       .filter((c) => c.id === "D4e5F6")
       .map((c) => ({
-        ownerName: c.name,
-        ownerEmail: c.email,
-        ownerCountry: c.country,
-        ownerPhone: c.phone,
+        ownerName: c.name || "",
+        ownerEmail: c.email || "",
+        ownerCountry: c.country || "",
+        ownerPhone: c.phone || "",
       }))[0],
   },
 ];

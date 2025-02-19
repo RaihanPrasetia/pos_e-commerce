@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowLeftCircleIcon, TrashIcon } from '@heroicons/react/16/solid';
 import { DocumentCheckIcon } from '@heroicons/react/20/solid';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation'; // Mengimpor useRouter
@@ -22,6 +23,10 @@ export default function EditProduct() {
 
     // Fungsi untuk menangani aksi discard, navigasi kembali
     const handleDiscard = () => {
+        alert("Delete Product");  // Kembali ke halaman sebelumnya
+    };
+
+    const handleBack = () => {
         router.back();  // Kembali ke halaman sebelumnya
     };
 
@@ -34,14 +39,22 @@ export default function EditProduct() {
                 </div>
                 <div className='flex space-x-4'>
                     <button
-                        onClick={handleDiscard}
-                        className="flex items-center px-4 border-2 border-slate-500 py-2 text-sm font-semibold text-slate-500 rounded-md transition"
+                        onClick={handleBack}
+                        className="flex items-center px-4 border-2 border-slate-500 py-2 text-sm font-semibold text-slate-500 rounded-md transition hover:bg-slate-200"
                     >
+                        <ArrowLeftCircleIcon className="h-5 w-5 mr-1" />
+                        Back
+                    </button>
+                    <button
+                        onClick={handleDiscard}
+                        className="flex items-center px-4 py-2 text-sm font-semibold text-white rounded-md transition bg-gradient-to-br from-orange-400 to-red-700 hover:brightness-105"
+                    >
+                        <TrashIcon className="h-5 w-5 mr-1" />
                         Discard
                     </button>
                     <button
                         onClick={handleSave}
-                        className="flex items-center px-4 border-2 border-slate-300 shadow-mui-customShadow py-2 text-sm font-semibold text-white bg-gradient-to-r from-pink-500 to-purple-700 rounded-md transition"
+                        className="flex items-center px-4  shadow-mui-customShadow bg-utama text-white py-2 text-sm font-semibold  rounded-md transition"
                     >
                         <DocumentCheckIcon className="h-5 w-5 mr-1" />
                         Save
