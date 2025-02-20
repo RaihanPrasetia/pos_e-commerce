@@ -14,7 +14,7 @@ const LocationTypeStyle = ({ name, idx }: { name: string, idx: number }) => {
         <div className='w-full space-x-2 flex items-center justify-start'>
             {name === "home" ? <HomeIcon className='w-8 h-8 text-slate-700  rounded-full' /> : <BuildingOffice2Icon className='w-8 h-8 text-slate-700  rounded-full' />}
             <Typography variant='body1' fontWeight="bold" className='text-slate-700'>{name.charAt(0).toUpperCase() + name.slice(1)}</Typography>
-            {idx === 0 && <span className='px-3 py-1 bg-green-200 text-green-600 font-semibold rounded-md'>Default Address</span>}
+            {idx === 0 && <span className='px-3 py-1 bg-green-200 text-sm text-green-600 font-medium rounded-md'>Default Address</span>}
 
         </div>
     )

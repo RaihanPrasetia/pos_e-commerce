@@ -25,12 +25,12 @@ export const initialProducts: ProductType[] = [
   {
     id: "P003",
     name: "Smartphone Stand",
-    categoryId: "C001",
+    categoryId: "C003",
     price: 19.99,
     code: "SS003",
     isActive: true,
     imageUrl: "/assets/img/products/smartphone-stand.png",
-    category: initialCategories.find((category) => category.id === "C001")!,
+    category: initialCategories.find((category) => category.id === "C003")!,
   },
   {
     id: "P004",

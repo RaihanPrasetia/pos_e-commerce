@@ -53,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         {/* Navbar */}
                         <Navbar toggleSidebar={handleSidebarToggle} isSidebar={isSidebarOpen} />
 
-                        <div className="px-4 min-h-screen">{children}</div>
+                        <div className="px-4">{children}</div>
 
                         {/* Footer */}
                         <Footer />

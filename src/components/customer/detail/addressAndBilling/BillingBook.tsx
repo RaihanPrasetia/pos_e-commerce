@@ -14,7 +14,7 @@ const BillingTypeStyle = ({ name, idx }: { name: string, idx: number }) => {
                 name === "Paypal" && <Image src="/assets/img/logos/paypal.png" alt={name} width={30} height={30} className='object-cover rounded-full' /> ||
                 name === "American Express" && <Image src="/assets/img/logos/american-express.png" alt={name} width={30} height={30} className='object-cover rounded-full' />}
             <Typography variant='body1' fontWeight="bold" className='text-slate-700'>{name.charAt(0).toUpperCase() + name.slice(1)}</Typography>
-            {idx === 0 && <span className='px-3 py-1 bg-green-200 text-green-600 font-semibold rounded-md'>Default Billing</span>}
+            {idx === 0 && <span className='px-3 py-1 bg-green-200 text-sm text-green-600 font-medium rounded-md'>Default Billing</span>}
         </div>
     )
 }
@@ -37,7 +37,7 @@ const CvcStyle = ({ name }: { name: CvcType }) => {
         <Typography
             variant="body2"
             p={2}
-            className={`rounded-md px-4 py-1 w-max font-semibold ${getBgColor()}`}
+            className={`rounded-md px-4 py-1 text-sm w-max font-medium ${getBgColor()}`}
         >
             {name}
         </Typography>
