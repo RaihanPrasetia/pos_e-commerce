@@ -12,12 +12,13 @@ export type TransactionType = {
   promotions: PromoTransaction[];
   taxs: TaxTransaction[];
   transactionDt: string;
+  grandTotal: number;
 };
 
 export type TransactionItem = {
-  id: string;
+  id?: string;
   productId: string;
-  transactionId: string;
+  transactionId?: string;
   imageUrl: string;
   name: string;
   price: number;

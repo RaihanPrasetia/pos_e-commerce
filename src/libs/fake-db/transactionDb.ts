@@ -67,5 +67,6 @@ export const initialTransaction: TransactionType[] = [
     items: initialItem.filter((i) => i.transactionId === "TRS0001"),
     promotions: initialPromoTrans.filter((p) => p.transactionId === "TRS0001"),
     taxs: initialTaxTrans.filter((t) => t.id === "TRS0001"),
+    grandTotal: 159.97,
   },
 ];

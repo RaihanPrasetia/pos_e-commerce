@@ -5,7 +5,7 @@ const ProductHead = () => {
     const currentDate = new Date().toLocaleDateString()
 
     return (
-        <div className='flex w-full justify-between items-center p-4 bg-utama text-white rounded-sm'>
+        <div className='flex w-full justify-between items-center p-4 bg-utama text-white'>
             <div className='flex items-center space-x-4'>
                 <HiLocationMarker className='w-10 h-10 p-1 rounded-full text-purple-500 bg-white' />
                 <div className='flex flex-col'>

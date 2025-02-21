@@ -48,7 +48,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ setCategory, setSearchTer
     }
 
     return (
-        <div className='space-x-2 flex items-center'>
+        <div className='space-x-2 px-2 flex items-center'>
             <TextField
                 label="Search Product"
                 variant="outlined"
@@ -62,7 +62,16 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ setCategory, setSearchTer
                     value={selectedCategory}
                     onChange={handleCategoryChange}
                     label="Category"
+                    MenuProps={{
+                        PaperProps: {
+                            style: {
+                                maxHeight: 200, // Membatasi tinggi menu dropdown agar bisa di-scroll
+                                overflowY: 'auto',
+                            },
+                        },
+                    }}
                 >
+
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
@@ -82,7 +91,16 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ setCategory, setSearchTer
                             value={selectedSubcategory}
                             onChange={handleSubcategoryChange}
                             label="Subcategory"
+                            MenuProps={{
+                                PaperProps: {
+                                    style: {
+                                        maxHeight: 200,
+                                        overflowY: 'auto',
+                                    },
+                                },
+                            }}
                         >
+
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>

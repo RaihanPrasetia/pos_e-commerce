@@ -6,8 +6,13 @@ import ProductHead from '@/components/transaction/product/ProductHead'
 import ProductFilter from '@/components/transaction/product/ProductFilter'
 import { Divider } from '@mui/material'
 import ProductList from '@/components/transaction/product/ProductList'
+import { TransactionItem } from '@/type/transactionType'
+interface TransactionProductProp {
+    setSelectedItem: (item: TransactionItem[]) => void
+    selectedProducts: TransactionItem[]
+}
 
-function TransactionProduct() {
+const TransactionProduct = ({ setSelectedItem, selectedProducts }: TransactionProductProp) => {
     const [productData, setProductData] = useState<ProductType[]>([])
     const [loading, setLoading] = useState(true)
     const [category, setCategory] = useState('')
@@ -36,30 +41,30 @@ function TransactionProduct() {
 
     if (loading) {
         return (
-            <div className='w-full h-[80vh] flex justify-center items-center'>
+            <div className='w-full h-[90vh] flex justify-center items-center'>
                 <CircularProgress />
             </div>
         )
     }
 
     return (
-        <div className='flex flex-col space-y-2 h-[80vh]'>
+        <div className='flex flex-col space-y-2 h-[85vh]'>
             {/* Product Head */}
             <ProductHead />
 
-            <Divider className='bg-utama p-1' />
+            <Divider className='bg-utama p-0.5' />
 
             {/* Product Filter */}
             <ProductFilter setCategory={setCategory} setSearchTerm={setSearchTerm} />
 
-            <Divider className='bg-utama p-1' />
+            <Divider className='bg-utama p-0.5' />
 
             {/* Render filtered product data here */}
             <div className='mt-2 h-full flex-grow overflow-hidden overflow-y-auto p-2'>
-                <ProductList productData={filteredProductData} />
+                <ProductList selectedProducts={selectedProducts} productData={filteredProductData} setSelectProduct={setSelectedItem} />
             </div>
 
-            <Divider className='bg-utama p-1' />
+            <Divider className='bg-utama p-0.5' />
 
         </div>
     )
